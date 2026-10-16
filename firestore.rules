@@ -1,0 +1,34 @@
+rules_version = '2';
+
+// Cada pessoa só lê e grava os PRÓPRIOS dados (users/{seu uid}/...).
+// Publique com: firebase deploy --only firestore:rules
+// (ou cole este conteúdo em Firestore Database → Regras, no console).
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    // Perfil: users/{uid}
+    match /users/{uid} {
+      allow read, write: if isOwner(uid);
+
+      // progress, quiz, notes, activity
+      match /{colecao}/{docId} {
+        allow read, delete: if isOwner(uid);
+        allow create, update: if isOwner(uid)
+          && colecao in ['progress', 'quiz', 'notes', 'activity']
+          && request.resource.data.size() <= 40
+          && (!('lastCode' in request.resource.data) || request.resource.data.lastCode.size() <= 20000)
+          && (!('aprendi' in request.resource.data) || request.resource.data.aprendi.size() <= 5000)
+          && (!('duvidas' in request.resource.data) || request.resource.data.duvidas.size() <= 3000);
+      }
+    }
+
+    // Todo o resto é bloqueado.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

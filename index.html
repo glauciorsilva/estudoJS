@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
+    <title>EstudoJS — JavaScript em 15 dias</title>
+    <meta name="description" content="Trilha de 15 dias para aprender JavaScript praticando: aulas, exercícios com correção automática, quizzes e revisão espaçada." />
+    <meta name="theme-color" content="#f7f7fb" />
+    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <script>
+      // Aplica o tema antes de desenhar a página (evita "piscar" claro → escuro).
+      try {
+        var t = localStorage.getItem('estudojs:tema') || 'auto';
+        var dark = t === 'dark' || (t === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+        if (t !== 'auto') document.documentElement.dataset.theme = t;
+        document.documentElement.dataset.themeResolved = dark ? 'dark' : 'light';
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <noscript>Este app precisa de JavaScript (é claro! 😄).</noscript>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
