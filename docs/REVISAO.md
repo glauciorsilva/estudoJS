@@ -9,7 +9,7 @@ O repositório estava vazio, então a “análise do projeto” cobriu o **plano
 | 1 | “Fluente em 15 dias” | Expectativa irreal gera frustração e abandono. Em ~50h dá para dominar os fundamentos e o JS moderno, não a fluência plena. | Meta realista no [ROADMAP](../ROADMAP.md), ritmo de 3–4h/dia, indicador “em dia / atrasado” e roteiro de continuidade após o dia 15. |
 | 2 | Estudar só lendo/assistindo | Leitura passiva dá ilusão de aprendizado. | 130 exercícios com correção automática, quizzes sem consulta, revisão espaçada, treino intercalado e diário (técnicas com mais evidência científica). |
 | 3 | Executar código digitado no navegador | Um `while(true)` trava a aba; código colado de um link poderia roubar o login do Firebase. | Execução num Web Worker dentro de iframe `sandbox` com origem opaca e tempo limite de 6 s. Testado: `localStorage`/IndexedDB do app ficam inacessíveis ao código do aluno. |
-| 4 | “Login gerado pela Authentication” + compartilhar com outra pessoa | Esconder o botão de cadastro não impede que alguém crie conta pela API pública. | Cadastro desligado por padrão no app **e** instrução para desativar *Enable create (sign-up)* no Firebase. As regras garantem que cada pessoa só acessa os próprios dados. |
+| 4 | Cadastro aberto para qualquer pessoa | Contas falsas/robôs podem consumir a cota gratuita do Firestore. | Cada pessoa só acessa os próprios dados (regras), limite de tamanho por documento, senha forte no cadastro e proteções do Firebase (ver seção abaixo). |
 | 5 | Chaves do Firebase no GitHub/Vercel | Confusão comum: achar que a config web é secreta, ou commitar `.env`. | Config via `VITE_FIREBASE_*`, `.env` no `.gitignore`, `.env.example` documentado. A segurança real está em `firestore.rules`. |
 | 6 | Firestore sem regras / em “modo de teste” | Modo de teste expira em 30 dias e deixa o banco aberto. | `firestore.rules` restritivo (só o dono, só coleções conhecidas, limite de tamanho) + `firebase.json` para publicar. |
 | 7 | Domínio da Vercel não autorizado | Login falha em produção com `auth/unauthorized-domain`. | Passo no README e mensagem de erro traduzida no app. |
@@ -29,6 +29,20 @@ O repositório estava vazio, então a “análise do projeto” cobriu o **plano
 - **Rascunhos antigos sobrescreviam código mais novo de outro aparelho**: o rascunho local é apagado sempre que o código é salvo na nuvem (a cada execução).
 - **Testes com `<select>`**: a página simulada não permite atribuir `select.value`; o teste foi ajustado para marcar a `<option>`.
 - **XSS**: textos vindos do usuário (nome, diário, e-mail) são sempre escapados; a pré-visualização do DOM roda num iframe sem scripts.
+
+## Cadastro aberto
+
+Decisão: **qualquer pessoa pode criar conta** (nome, e-mail e senha). O que isso implica e como foi tratado:
+
+| Risco | Gravidade | Mitigação |
+|---|---|---|
+| Uma pessoa ver/alterar dados de outra | Alta | **Impossível pelas regras**: `users/{uid}` só aceita o próprio `uid`. Nenhuma coleção compartilhada. |
+| Robôs criando milhares de contas | Média | *Sign-up quota* por IP no Firebase; App Check (opcional). |
+| Consumo da cota gratuita do Firestore (Spark: 50 mil leituras e 20 mil gravações/dia) | Média | Gravações agrupadas (debounce), cache offline, limite de tamanho dos documentos. Cada estudante ativo usa ~300 gravações/hora. Plano gratuito não cobra: se estourar, o banco para até o dia seguinte. |
+| Senhas fracas | Média | O app exige 8+ caracteres com letras e números; reforce com *Password policy* no Firebase. |
+| E-mails falsos | Baixa | Enviamos e-mail de confirmação (não bloqueia o uso). Para exigir confirmação, é preciso checar `emailVerified` no app e nas regras. |
+| Pessoas digitando código malicioso para outras | — | Não existe conteúdo compartilhado entre usuários; o código de cada um roda isolado no próprio navegador. |
+| LGPD (dados pessoais: nome e e-mail) | Baixa | Coletamos o mínimo. Recomenda-se uma página curta de privacidade e permitir excluir a conta (hoje: “Zerar progresso” apaga os dados de estudo). |
 
 ## 3. Limitações conhecidas (e alternativas)
 

@@ -35,8 +35,13 @@ Sem configurar o Firebase, o app abre em **modo local** (progresso salvo só naq
 
 1. Acesse <https://console.firebase.google.com> → **Adicionar projeto**.
 2. **Authentication** → *Começar* → *Método de login* → ative **E-mail/senha**.
-3. **Authentication → Users → Adicionar usuário**: crie a sua conta e a da outra pessoa (e-mail + senha).
-4. Bloqueie cadastros por terceiros: **Authentication → Settings → User actions** → desmarque **Enable create (sign-up)**. (O app já esconde o botão de cadastro, mas só essa opção bloqueia de verdade.)
+3. **Cadastro aberto (padrão):** qualquer pessoa cria a própria conta na tela de login (nome, e-mail e senha). Deixe ligado **Authentication → Settings → User actions → Enable create (sign-up)**.
+4. **Proteções recomendadas com cadastro aberto** (veja [docs/REVISAO.md](docs/REVISAO.md#cadastro-aberto)):
+   - **Authentication → Settings → Password policy**: exija no mínimo 8 caracteres (o app já pede letras e números).
+   - **Authentication → Settings → Sign-up quota**: limite de contas novas por IP (ex.: 10 por hora) contra robôs.
+   - **App Check** com reCAPTCHA Enterprise (opcional, recomendado se o app ficar público).
+   - Em **Uso e faturamento**, crie um alerta de orçamento se ativar o plano Blaze.
+   - Para voltar a fechar o cadastro: desmarque *Enable create* e defina `VITE_ALLOW_SIGNUP=false`.
 5. **Firestore Database** → *Criar banco de dados* → modo **produção** → região `southamerica-east1` (São Paulo).
 6. **Firestore → Regras**: cole o conteúdo de [`firestore.rules`](firestore.rules) e publique. Sem isso, o app mostra “permissão negada”.
    - Alternativa via terminal: `npm i -g firebase-tools && firebase login && firebase use --add && firebase deploy --only firestore:rules`

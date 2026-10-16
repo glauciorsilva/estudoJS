@@ -13,5 +13,7 @@ export const firebaseConfig = {
 // Sem Firebase configurado, o app funciona em "modo local" (dados só neste navegador).
 export const firebaseEnabled = Boolean(firebaseConfig.apiKey && firebaseConfig.projectId && firebaseConfig.appId);
 
-// O cadastro público fica desligado por padrão: as contas são criadas no console do Firebase.
-export const allowSignup = env.VITE_ALLOW_SIGNUP === 'true';
+// Cadastro aberto por padrão: qualquer pessoa pode criar conta com e-mail e senha.
+// Para fechar (só o administrador cria contas), defina VITE_ALLOW_SIGNUP=false
+// e desative "Enable create (sign-up)" no Firebase Authentication.
+export const allowSignup = env.VITE_ALLOW_SIGNUP !== 'false';

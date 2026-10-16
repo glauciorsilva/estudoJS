@@ -2,6 +2,7 @@
 import { firebaseEnabled } from './config.js';
 
 const LOCAL_USER_KEY = 'estudojs:local-user';
+const PENDING_NAME_KEY = 'estudojs:nome-cadastro';
 let fb = null; // módulos do Firebase carregados sob demanda
 
 async function loadFirebase() {
@@ -13,7 +14,10 @@ async function loadFirebase() {
 }
 
 function toUser(u) {
-  return u ? { uid: u.uid, email: u.email, name: u.displayName || (u.email || '').split('@')[0], local: false } : null;
+  if (!u) return null;
+  // Logo após o cadastro, o displayName ainda pode não ter sido gravado: usa o nome digitado.
+  const name = u.displayName || safeGet(PENDING_NAME_KEY) || (u.email || '').split('@')[0];
+  return { uid: u.uid, email: u.email, name, local: false, verified: u.emailVerified };
 }
 
 /** Chama onChange(user | null) sempre que o login mudar. */
@@ -32,9 +36,18 @@ export async function login(email, senha) {
   await signInWithEmailAndPassword(auth, email.trim(), senha);
 }
 
-export async function signup(email, senha) {
-  const { auth, createUserWithEmailAndPassword } = await loadFirebase();
-  await createUserWithEmailAndPassword(auth, email.trim(), senha);
+export async function signup(nome, email, senha) {
+  const { auth, createUserWithEmailAndPassword, updateProfile, sendEmailVerification } = await loadFirebase();
+  safeSet(PENDING_NAME_KEY, nome);
+  try {
+    const { user } = await createUserWithEmailAndPassword(auth, email.trim(), senha);
+    await updateProfile(user, { displayName: nome });
+    auth.languageCode = 'pt-BR';
+    // Confirmação de e-mail: não bloqueia o uso, mas ajuda a recuperar a senha depois.
+    sendEmailVerification(user).catch(() => {});
+  } finally {
+    safeRemove(PENDING_NAME_KEY);
+  }
 }
 
 export async function resetPassword(email) {
@@ -72,7 +85,8 @@ const AUTH_ERRORS = {
   'auth/email-already-in-use': 'Este e-mail já tem conta.',
   'auth/weak-password': 'A senha precisa ter pelo menos 6 caracteres.',
   'auth/operation-not-allowed': 'Login por e-mail/senha não está ativado no Firebase.',
-  'auth/admin-restricted-operation': 'Cadastro desativado. Peça ao administrador para criar sua conta.',
+  'auth/admin-restricted-operation': 'O cadastro está desativado no Firebase (Authentication → Settings → User actions → Enable create).',
+  'auth/password-does-not-meet-requirements': 'A senha não atende à política de senhas definida no Firebase.',
   'auth/unauthorized-domain': 'Este domínio não está autorizado no Firebase (Authentication → Settings → Authorized domains).',
   'auth/api-key-not-valid.-please-pass-a-valid-api-key.': 'Chave do Firebase inválida. Verifique as variáveis VITE_FIREBASE_*.',
 };

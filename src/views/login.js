@@ -2,6 +2,8 @@ import { toast } from '../ui/dom.js';
 import { firebaseEnabled, allowSignup } from '../config.js';
 import { login, signup, resetPassword, loginLocal, authErrorMessage } from '../auth.js';
 
+const SENHA_MIN = 8;
+
 export function loginView(root, { onLocalLogin }) {
   root.innerHTML = `
   <main class="login" id="conteudo">
@@ -10,16 +12,22 @@ export function loginView(root, { onLocalLogin }) {
       <h1>EstudoJS</h1>
       <p class="muted">JavaScript em 15 dias, praticando de verdade.</p>
       ${firebaseEnabled ? `
+      ${allowSignup ? `<div class="segmentado modo-login" role="tablist" aria-label="Entrar ou criar conta">
+        <button type="button" role="tab" class="modo ativo" data-modo="entrar" aria-selected="true">Entrar</button>
+        <button type="button" role="tab" class="modo" data-modo="criar" aria-selected="false">Criar conta</button>
+      </div>` : ''}
       <form id="form-login" novalidate>
+        <label data-so="criar" hidden>Nome<input id="nome" autocomplete="name" maxlength="40"></label>
         <label>E-mail<input type="email" id="email" autocomplete="email" inputmode="email" required></label>
         <label>Senha
-          <span class="senha-wrap"><input type="password" id="senha" autocomplete="current-password" required minlength="6">
+          <span class="senha-wrap"><input type="password" id="senha" autocomplete="current-password" required>
           <button type="button" class="btn-icone" id="ver-senha" aria-label="Mostrar senha">👁</button></span>
+          <span class="pequeno muted" data-so="criar" hidden>Mínimo de ${SENHA_MIN} caracteres, com letras e números.</span>
         </label>
+        <label data-so="criar" hidden>Confirmar senha<input type="password" id="senha2" autocomplete="new-password"></label>
         <p class="erro-form" id="erro" role="alert"></p>
-        <button class="btn btn-primary btn-bloco" id="entrar">Entrar</button>
-        ${allowSignup ? '<button type="button" class="btn btn-ghost btn-bloco" id="cadastrar">Criar conta</button>' : ''}
-        <button type="button" class="link" id="esqueci">Esqueci minha senha</button>
+        <button class="btn btn-primary btn-bloco" id="enviar">Entrar</button>
+        <button type="button" class="link" id="esqueci" data-so="entrar">Esqueci minha senha</button>
       </form>
       ${allowSignup ? '' : '<p class="muted pequeno">As contas são criadas pelo administrador no Firebase Authentication.</p>'}
       ` : `
@@ -42,29 +50,62 @@ export function loginView(root, { onLocalLogin }) {
     return;
   }
 
-  const form = root.querySelector('#form-login');
-  const email = root.querySelector('#email');
-  const senha = root.querySelector('#senha');
-  const erro = root.querySelector('#erro');
-  const btn = root.querySelector('#entrar');
+  const $ = (s) => root.querySelector(s);
+  const form = $('#form-login');
+  const nome = $('#nome');
+  const email = $('#email');
+  const senha = $('#senha');
+  const senha2 = $('#senha2');
+  const erro = $('#erro');
+  const btn = $('#enviar');
+  let modo = 'entrar';
 
-  root.querySelector('#ver-senha').addEventListener('click', (e) => {
+  function setModo(novo) {
+    modo = novo;
+    root.querySelectorAll('[data-so]').forEach((el) => { el.hidden = el.dataset.so !== modo; });
+    root.querySelectorAll('.modo').forEach((b) => {
+      const ativo = b.dataset.modo === modo;
+      b.classList.toggle('ativo', ativo);
+      b.setAttribute('aria-selected', String(ativo));
+    });
+    btn.textContent = modo === 'criar' ? 'Criar conta' : 'Entrar';
+    senha.autocomplete = modo === 'criar' ? 'new-password' : 'current-password';
+    erro.textContent = '';
+    (modo === 'criar' ? nome : email).focus();
+  }
+  root.querySelectorAll('.modo').forEach((b) => b.addEventListener('click', () => setModo(b.dataset.modo)));
+
+  $('#ver-senha').addEventListener('click', (e) => {
     const visivel = senha.type === 'text';
     senha.type = visivel ? 'password' : 'text';
     e.currentTarget.setAttribute('aria-label', visivel ? 'Mostrar senha' : 'Ocultar senha');
   });
 
-  const run = async (fn, labelOcupado) => {
-    erro.textContent = '';
-    if (!email.value.trim() || !senha.value) {
-      erro.textContent = 'Preencha e-mail e senha.';
-      return;
+  function validar() {
+    if (!email.value.trim() || !senha.value) return 'Preencha e-mail e senha.';
+    if (modo !== 'criar') return '';
+    if (nome.value.trim().length < 2) return 'Digite seu nome.';
+    if (senha.value.length < SENHA_MIN || !/\d/.test(senha.value) || !/[a-zA-Z]/.test(senha.value)) {
+      return `A senha precisa ter pelo menos ${SENHA_MIN} caracteres, com letras e números.`;
     }
+    if (senha.value !== senha2.value) return 'As senhas não conferem.';
+    return '';
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    erro.textContent = validar();
+    if (erro.textContent) return;
     btn.disabled = true;
     const original = btn.textContent;
-    btn.textContent = labelOcupado;
+    btn.textContent = modo === 'criar' ? 'Criando…' : 'Entrando…';
     try {
-      await fn(email.value, senha.value);
+      if (modo === 'criar') {
+        await signup(nome.value.trim(), email.value, senha.value);
+        toast('Conta criada! Enviamos um e-mail de confirmação.', 'ok', 5000);
+      } else {
+        await login(email.value, senha.value);
+      }
       // onAuthStateChanged (em main.js) cuida do redirecionamento
     } catch (err) {
       erro.textContent = authErrorMessage(err);
@@ -72,14 +113,9 @@ export function loginView(root, { onLocalLogin }) {
       btn.disabled = false;
       btn.textContent = original;
     }
-  };
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    run(login, 'Entrando…');
   });
-  root.querySelector('#cadastrar')?.addEventListener('click', () => run(signup, 'Criando…'));
-  root.querySelector('#esqueci').addEventListener('click', async () => {
+
+  $('#esqueci').addEventListener('click', async () => {
     erro.textContent = '';
     if (!email.value.trim()) {
       erro.textContent = 'Digite seu e-mail acima e toque novamente em “Esqueci minha senha”.';
