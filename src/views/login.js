@@ -1,6 +1,6 @@
 import { toast } from '../ui/dom.js';
 import { firebaseEnabled, allowSignup } from '../config.js';
-import { login, signup, resetPassword, loginLocal, authErrorMessage } from '../auth.js';
+import { login, signup, resetPassword, loginLocal, authErrorMessage, checarSenha } from '../auth.js';
 
 const SENHA_MIN = 8;
 
@@ -22,7 +22,7 @@ export function loginView(root, { onLocalLogin }) {
         <label>Senha
           <span class="senha-wrap"><input type="password" id="senha" autocomplete="current-password" required>
           <button type="button" class="btn-icone" id="ver-senha" aria-label="Mostrar senha">👁</button></span>
-          <span class="pequeno muted" data-so="criar" hidden>Mínimo de ${SENHA_MIN} caracteres, com letras e números.</span>
+          <span class="pequeno muted" data-so="criar" hidden id="regras-senha">Mínimo de ${SENHA_MIN} caracteres.</span>
         </label>
         <label data-so="criar" hidden>Confirmar senha<input type="password" id="senha2" autocomplete="new-password"></label>
         <p class="erro-form" id="erro" role="alert"></p>
@@ -72,6 +72,18 @@ export function loginView(root, { onLocalLogin }) {
     senha.autocomplete = modo === 'criar' ? 'new-password' : 'current-password';
     erro.textContent = '';
     (modo === 'criar' ? nome : email).focus();
+    if (modo === 'criar') mostrarRegras();
+  }
+
+  // Mostra as regras de senha configuradas no Firebase (Password policy).
+  let regrasCarregadas = false;
+  async function mostrarRegras() {
+    if (regrasCarregadas) return;
+    try {
+      const { regras } = await checarSenha('');
+      if (regras.length) $('#regras-senha').textContent = `A senha precisa ter: ${regras.join(', ')}.`;
+      regrasCarregadas = true;
+    } catch { /* sem conexão: mantém o texto padrão */ }
   }
   root.querySelectorAll('.modo').forEach((b) => b.addEventListener('click', () => setModo(b.dataset.modo)));
 
@@ -85,9 +97,7 @@ export function loginView(root, { onLocalLogin }) {
     if (!email.value.trim() || !senha.value) return 'Preencha e-mail e senha.';
     if (modo !== 'criar') return '';
     if (nome.value.trim().length < 2) return 'Digite seu nome.';
-    if (senha.value.length < SENHA_MIN || !/\d/.test(senha.value) || !/[a-zA-Z]/.test(senha.value)) {
-      return `A senha precisa ter pelo menos ${SENHA_MIN} caracteres, com letras e números.`;
-    }
+    if (senha.value.length < SENHA_MIN) return `A senha precisa ter pelo menos ${SENHA_MIN} caracteres.`;
     if (senha.value !== senha2.value) return 'As senhas não conferem.';
     return '';
   }

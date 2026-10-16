@@ -38,6 +38,13 @@ export async function login(email, senha) {
 
 export async function signup(nome, email, senha) {
   const { auth, createUserWithEmailAndPassword, updateProfile, sendEmailVerification } = await loadFirebase();
+  const senhaOk = await checarSenha(senha);
+  if (!senhaOk.valida) {
+    const err = new Error('Senha fraca');
+    err.code = 'auth/password-does-not-meet-requirements';
+    err.faltando = senhaOk.faltando;
+    throw err;
+  }
   safeSet(PENDING_NAME_KEY, nome);
   try {
     const { user } = await createUserWithEmailAndPassword(auth, email.trim(), senha);
@@ -48,6 +55,28 @@ export async function signup(nome, email, senha) {
   } finally {
     safeRemove(PENDING_NAME_KEY);
   }
+}
+
+const REQUISITOS = [
+  // [campo do resultado, texto, opção da política]
+  ['meetsMinPasswordLength', (o) => `pelo menos ${o.minPasswordLength ?? 6} caracteres`, 'minPasswordLength'],
+  ['containsLowercaseLetter', () => 'uma letra minúscula', 'containsLowercaseLetter'],
+  ['containsUppercaseLetter', () => 'uma letra MAIÚSCULA', 'containsUppercaseLetter'],
+  ['containsNumericCharacter', () => 'um número', 'containsNumericCharacter'],
+  ['containsNonAlphanumericCharacter', () => 'um símbolo (ex.: ! @ # $ %)', 'containsNonAlphanumericCharacter'],
+];
+
+/**
+ * Confere a senha contra a política configurada no Firebase (Authentication → Settings → Password policy).
+ * Retorna { valida, faltando: [textos], regras: [textos] }.
+ */
+export async function checarSenha(senha) {
+  const { auth, validatePassword } = await loadFirebase();
+  const status = await validatePassword(auth, senha);
+  const opts = status.passwordPolicy?.customStrengthOptions || {};
+  const regras = REQUISITOS.filter(([, , opt]) => opt === 'minPasswordLength' || opts[opt]).map(([, txt]) => txt(opts));
+  const faltando = REQUISITOS.filter(([campo]) => status[campo] === false).map(([, txt]) => txt(opts));
+  return { valida: status.isValid, faltando, regras };
 }
 
 export async function resetPassword(email) {
@@ -92,6 +121,7 @@ const AUTH_ERRORS = {
 };
 
 export function authErrorMessage(err) {
+  if (err?.faltando?.length) return `A senha precisa ter: ${err.faltando.join(', ')}.`;
   return AUTH_ERRORS[err?.code] || `Não foi possível concluir (${err?.code || err?.message || 'erro desconhecido'}).`;
 }
 
