@@ -19,7 +19,8 @@ function md(html = '') {
     .replace(/<pre>([\s\S]*?)<\/pre>/g, (_, c) => guardar(`\n\n\`\`\`\n${decode(c.replace(/<[^>]+>/g, ''))}\n\`\`\`\n\n`))
     .replace(/<(code|kbd)>([\s\S]*?)<\/\1>/g, (_, t, c) => guardar(span(decode(c))))
     .replace(/<li>/g, '\n- ')
-    .replace(/<\/li>|<\/?ul>|<\/?ol>/g, '')
+    .replace(/<\/li>|<ul>|<ol>/g, '')
+    .replace(/<\/(ul|ol)>/g, '\n\n')
     .replace(/<\/p>\s*<p>/g, '\n\n')
     .replace(/<\/?p>/g, '\n')
     .replace(/<(strong|b)>([\s\S]*?)<\/\1>/g, '**$2**')
@@ -35,18 +36,56 @@ function md(html = '') {
 function decode(s) {
   return s.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&');
 }
-const fmt = (v) => formatValue(v, 0, new WeakSet(), false);
+const fmt = (v) => formatValue(v, 0, new WeakSet(), false).replace(/\n/g, '\\n');
 const code = (c) => `\`\`\`js\n${c.trim()}\n\`\`\``;
 const plain = (h) => md(h).replace(/\n+/g, ' ');
 
+// O nome do teste só ajuda quando acrescenta algo além da chamada e do valor.
+const nomeUtil = (t) => !t.name.startsWith(t.run.slice(0, 8)) && !t.name.includes('→') && !/^["']/.test(t.name);
+
+// Quebra o código do teste em linhas nos ';' de nível superior (não dentro de for(...)).
+function quebrar(codigo) {
+  const linhas = [];
+  let atual = '';
+  let parenteses = 0;
+  for (let i = 0; i < codigo.length; i++) {
+    const c = codigo[i];
+    if (c === '(') parenteses++;
+    if (c === ')') parenteses--;
+    atual += c;
+    if (c === ';' && parenteses <= 1 && codigo[i + 1] === ' ') {
+      linhas.push(atual.trim());
+      atual = '';
+    }
+  }
+  if (atual.trim()) linhas.push(atual.trim());
+  return linhas;
+}
+
+// Lista usada em vários testes do dia 8: aparece uma vez no início dos exercícios.
+const PRODUTOS = "[{ nome: 'Teclado', preco: 150, categoria: 'perifericos' }, { nome: 'Mouse', preco: 80, categoria: 'perifericos' }, { nome: 'Monitor', preco: 900, categoria: 'telas' }, { nome: 'Cabo HDMI', preco: 30, categoria: 'acessorios' }]";
+const NOTA_PRODUTOS = `> 📦 Vários exercícios de hoje usam esta **lista de produtos de exemplo** (chamada de \`produtos\` nos resultados):
+
+\`\`\`js
+const produtos = [
+  { nome: 'Teclado', preco: 150, categoria: 'perifericos' },
+  { nome: 'Mouse', preco: 80, categoria: 'perifericos' },
+  { nome: 'Monitor', preco: 900, categoria: 'telas' },
+  { nome: 'Cabo HDMI', preco: 30, categoria: 'acessorios' },
+];
+\`\`\`
+
+`;
+
 function resultadoEsperado(ex) {
   const linhas = [];
-  for (const t of ex.tests) {
+  for (const original of ex.tests) {
+    const t = original.run ? { ...original, run: original.run.split(PRODUTOS).join('produtos') } : original;
     if (t.run) {
       const curto = t.run.length <= 70;
       linhas.push(curto
-        ? `- \`${t.run}\` → deve resultar em **\`${fmt(t.expected)}\`**${t.name.startsWith(t.run.slice(0, 8)) ? '' : ` _(${t.name})_`}`
-        : `- **${t.name}** → resultado esperado: \`${fmt(t.expected)}\`\n\n  Teste executado pelo app:\n\n  \`\`\`js\n  ${t.run.replace(/; /g, ';\n  ')}\n  \`\`\``);
+        ? `- \`${t.run}\` → deve resultar em **\`${fmt(t.expected)}\`**${nomeUtil(t) ? ` _(${t.name})_` : ''}`
+        : `- **${t.name}** → resultado esperado: \`${fmt(t.expected)}\`\n\n  Teste executado pelo app:\n\n  \`\`\`js\n  ${quebrar(t.run).join('\n  ')}\n  \`\`\``);
     } else if (t.logs) {
       linhas.push(`- **${t.name}** — o console deve mostrar exatamente:\n\n\`\`\`\n${t.logs.join('\n') || '(nada)'}\n\`\`\``);
     } else if (t.logsInclude) {
@@ -73,7 +112,8 @@ function aula(day) {
 }
 
 function exercicios(day) {
-  return day.exercises.map((ex, i) => {
+  const usaProdutos = day.exercises.some((ex) => ex.tests.some((t) => t.run?.includes(PRODUTOS)));
+  return (usaProdutos ? NOTA_PRODUTOS : '') + day.exercises.map((ex, i) => {
     const partes = [
       `### Exercício ${day.day}.${i + 1} — ${ex.title}`,
       `*${topicLabel(ex.topic)} · ${DIF[ex.difficulty]}*`,

@@ -756,6 +756,7 @@ Complete `calcularFrete(peso, regiao)`:
 
 - Taxa base: `'sul'` = 10, `'norte'` = 20, qualquer outra região = 15.
 - Para cada kg **acima de 5**, some 2.
+
 Ex.: `calcularFrete(8, 'sul')` → 10 + 3×2 = 16.
 
 **Código inicial:**
@@ -1150,9 +1151,7 @@ console.log(escada(4));
 **✅ Resultado esperado** — o exercício está certo quando:
 
 - `escada(1)` → deve resultar em **`'#'`**
-- `escada(3)` → deve resultar em **`'#
-##
-###'`**
+- `escada(3)` → deve resultar em **`'#\n##\n###'`**
 - `escada(5).split('\n').length` → deve resultar em **`5`**
 
 **💡 Dicas** (use só se travar):
@@ -1419,6 +1418,7 @@ Crie duas funções:
 
 - `calcularIMC(peso, altura)`: retorna peso ÷ altura², arredondado para 1 casa decimal (`Math.round(x * 10) / 10`).
 - `classificarIMC(imc)`: abaixo de 18.5 → `'abaixo'`; abaixo de 25 → `'normal'`; abaixo de 30 → `'sobrepeso'`; senão → `'obesidade'`.
+
 Por fim, `diagnostico(peso, altura)` deve usar as duas e retornar, por ex., `'IMC 22.9: normal'`.
 
 **Código inicial:**
@@ -1516,10 +1516,10 @@ function senhaForte(senha) {
 
 **✅ Resultado esperado** — o exercício está certo quando:
 
-- `senhaForte('Abcdefg1')` → deve resultar em **`true`** _("Abcdefg1" → true)_
-- `senhaForte('abcdefg1')` → deve resultar em **`false`** _("abcdefg1" (sem maiúscula) → false)_
-- `senhaForte('Abcdefgh')` → deve resultar em **`false`** _("Abcdefgh" (sem número) → false)_
-- `senhaForte('Ab1')` → deve resultar em **`false`** _("Ab1" (curta) → false)_
+- `senhaForte('Abcdefg1')` → deve resultar em **`true`**
+- `senhaForte('abcdefg1')` → deve resultar em **`false`**
+- `senhaForte('Abcdefgh')` → deve resultar em **`false`**
+- `senhaForte('Ab1')` → deve resultar em **`false`**
 
 **💡 Dicas** (use só se travar):
 
@@ -1717,9 +1717,9 @@ function formatarNome(nome) {
 
 **✅ Resultado esperado** — o exercício está certo quando:
 
-- `formatarNome('  maria  da silva ')` → deve resultar em **`'Maria Da Silva'`** _("  maria  da silva ")_
-- `formatarNome('JOÃO pedro')` → deve resultar em **`'João Pedro'`** _("JOÃO pedro")_
-- `formatarNome('ana')` → deve resultar em **`'Ana'`** _("ana")_
+- `formatarNome('  maria  da silva ')` → deve resultar em **`'Maria Da Silva'`**
+- `formatarNome('JOÃO pedro')` → deve resultar em **`'João Pedro'`**
+- `formatarNome('ana')` → deve resultar em **`'Ana'`**
 
 **💡 Dicas** (use só se travar):
 
@@ -1744,9 +1744,9 @@ function ehPalindromo(texto) {
 
 **✅ Resultado esperado** — o exercício está certo quando:
 
-- `ehPalindromo('arara')` → deve resultar em **`true`** _("arara" → true)_
-- `ehPalindromo('Socorram me subi no onibus em Marrocos')` → deve resultar em **`true`** _(frase longa → true)_
-- `ehPalindromo('javascript')` → deve resultar em **`false`** _("javascript" → false)_
+- `ehPalindromo('arara')` → deve resultar em **`true`**
+- `ehPalindromo('Socorram me subi no onibus em Marrocos')` → deve resultar em **`true`**
+- `ehPalindromo('javascript')` → deve resultar em **`false`**
 
 **💡 Dicas** (use só se travar):
 
@@ -1795,10 +1795,10 @@ function contarPalavras(frase) {
 
 **✅ Resultado esperado** — o exercício está certo quando:
 
-- `contarPalavras('Olá mundo')` → deve resultar em **`2`** _("Olá mundo" → 2)_
-- `contarPalavras('  muitos   espaços  aqui ')` → deve resultar em **`3`** _("  muitos   espaços  aqui " → 3)_
-- `contarPalavras('')` → deve resultar em **`0`** _("" → 0)_
-- `contarPalavras('   ')` → deve resultar em **`0`** _("   " → 0)_
+- `contarPalavras('Olá mundo')` → deve resultar em **`2`**
+- `contarPalavras('  muitos   espaços  aqui ')` → deve resultar em **`3`**
+- `contarPalavras('')` → deve resultar em **`0`**
+- `contarPalavras('   ')` → deve resultar em **`0`**
 
 **💡 Dicas** (use só se travar):
 
@@ -1822,9 +1822,9 @@ function formatarMoeda(valor) {
 
 **✅ Resultado esperado** — o exercício está certo quando:
 
-- `formatarMoeda(10.5)` → deve resultar em **`'R$ 10,50'`** _(10.5 → "R$ 10,50")_
-- `formatarMoeda(3)` → deve resultar em **`'R$ 3,00'`** _(3 → "R$ 3,00")_
-- `formatarMoeda(19.999)` → deve resultar em **`'R$ 20,00'`** _(19.999 → "R$ 20,00")_
+- `formatarMoeda(10.5)` → deve resultar em **`'R$ 10,50'`**
+- `formatarMoeda(3)` → deve resultar em **`'R$ 3,00'`**
+- `formatarMoeda(19.999)` → deve resultar em **`'R$ 20,00'`**
 
 **💡 Dicas** (use só se travar):
 
@@ -1849,9 +1849,9 @@ function somarTextos(a, b) {
 
 **✅ Resultado esperado** — o exercício está certo quando:
 
-- `somarTextos('10', '5,5')` → deve resultar em **`15.5`** _("10" + "5,5" → 15.5)_
-- `somarTextos('1.5', '2')` → deve resultar em **`3.5`** _("1.5" + "2" → 3.5)_
-- `somarTextos('abc', '2')` → deve resultar em **`null`** _("abc" + "2" → null)_
+- `somarTextos('10', '5,5')` → deve resultar em **`15.5`**
+- `somarTextos('1.5', '2')` → deve resultar em **`3.5`**
+- `somarTextos('abc', '2')` → deve resultar em **`null`**
 
 **💡 Dicas** (use só se travar):
 
@@ -1881,9 +1881,7 @@ function numeroAleatorio(min, max) {
 
   ```js
   (() => { const vistos = new Set();
-  for (let i = 0;
-  i < 3000;
-  i++) { const n = numeroAleatorio(1, 3);
+  for (let i = 0; i < 3000; i++) { const n = numeroAleatorio(1, 3);
   if (!Number.isInteger(n) || n < 1 || n > 3) return false;
   vistos.add(n);
   } return vistos.size === 3;
@@ -1895,9 +1893,7 @@ function numeroAleatorio(min, max) {
 
   ```js
   (() => { const vistos = new Set();
-  for (let i = 0;
-  i < 3000;
-  i++) { const n = numeroAleatorio(-2, 2);
+  for (let i = 0; i < 3000; i++) { const n = numeroAleatorio(-2, 2);
   if (!Number.isInteger(n) || n < -2 || n > 2) return false;
   vistos.add(n);
   } return vistos.size === 5;
@@ -1918,8 +1914,8 @@ Crie `iniciais(nome)` que retorna as iniciais em maiúsculas. `iniciais('ada lov
 
 **✅ Resultado esperado** — o exercício está certo quando:
 
-- `iniciais('ada lovelace byron')` → deve resultar em **`'ALB'`** _("ada lovelace byron" → "ALB")_
-- `iniciais('Grace Hopper')` → deve resultar em **`'GH'`** _("Grace Hopper" → "GH")_
+- `iniciais('ada lovelace byron')` → deve resultar em **`'ALB'`**
+- `iniciais('Grace Hopper')` → deve resultar em **`'GH'`**
 
 **💡 Dicas** (use só se travar):
 
@@ -2083,8 +2079,8 @@ function pontas(lista) {
 
 **✅ Resultado esperado** — o exercício está certo quando:
 
-- `pontas([4, 8, 15, 16])` → deve resultar em **`[ 4, 16 ]`** _([4, 8, 15, 16] → [4, 16])_
-- `pontas(['a', 'b'])` → deve resultar em **`[ 'a', 'b' ]`** _(["a", "b"] → ["a", "b"])_
+- `pontas([4, 8, 15, 16])` → deve resultar em **`[ 4, 16 ]`**
+- `pontas(['a', 'b'])` → deve resultar em **`[ 'a', 'b' ]`**
 
 **💡 Dicas** (use só se travar):
 
@@ -2127,7 +2123,7 @@ function atenderProximo(fila) {
   return [atenderProximo(f), atenderProximo(f), f.length];
   })()
   ```
-- `atenderProximo([])` → deve resultar em **`null`** _(Fila vazia → null)_
+- `atenderProximo([])` → deve resultar em **`null`**
 
 **💡 Dicas** (use só se travar):
 
@@ -2182,9 +2178,9 @@ function maiorValor(numeros) {
 
 **✅ Resultado esperado** — o exercício está certo quando:
 
-- `maiorValor([3, 9, 2])` → deve resultar em **`9`** _([3, 9, 2] → 9)_
-- `maiorValor([-5, -2, -8])` → deve resultar em **`-2`** _([-5, -2, -8] → -2)_
-- `maiorValor([])` → deve resultar em **`undefined`** _([] → undefined)_
+- `maiorValor([3, 9, 2])` → deve resultar em **`9`**
+- `maiorValor([-5, -2, -8])` → deve resultar em **`-2`**
+- `maiorValor([])` → deve resultar em **`undefined`**
 - 📏 Regra de código: Não usou Math.max nem sort
 
 **💡 Dicas** (use só se travar):
@@ -2208,7 +2204,7 @@ function semDuplicados(lista) {
 
 **✅ Resultado esperado** — o exercício está certo quando:
 
-- `semDuplicados([1, 2, 2, 3, 1])` → deve resultar em **`[ 1, 2, 3 ]`** _([1, 2, 2, 3, 1] → [1, 2, 3])_
+- `semDuplicados([1, 2, 2, 3, 1])` → deve resultar em **`[ 1, 2, 3 ]`**
 - `semDuplicados(['a', 'b', 'a'])` → deve resultar em **`[ 'a', 'b' ]`** _(textos)_
 - `(() => { const l = [1, 1]; semDuplicados(l); return l; })()` → deve resultar em **`[ 1, 1 ]`** _(Não altera o original)_
 
@@ -2249,7 +2245,7 @@ function invertido(lista) {
 
 **✅ Resultado esperado** — o exercício está certo quando:
 
-- `invertido([1, 2, 3])` → deve resultar em **`[ 3, 2, 1 ]`** _([1, 2, 3] → [3, 2, 1])_
+- `invertido([1, 2, 3])` → deve resultar em **`[ 3, 2, 1 ]`**
 - `(() => { const l = [1, 2]; invertido(l); return l; })()` → deve resultar em **`[ 1, 2 ]`** _(Original intacto)_
 - 📏 Regra de código: Não usou reverse
 
@@ -2325,7 +2321,7 @@ function dividirEmGrupos(lista, tamanho) {
 
 - `dividirEmGrupos([1, 2, 3, 4, 5], 2)` → deve resultar em **`[ [ 1, 2 ], [ 3, 4 ], [ 5 ] ]`** _([1..5] em 2)_
 - `dividirEmGrupos([1, 2, 3, 4, 5, 6], 3)` → deve resultar em **`[ [ 1, 2, 3 ], [ 4, 5, 6 ] ]`** _([1..6] em 3)_
-- `dividirEmGrupos([], 3)` → deve resultar em **`[]`** _([] → [])_
+- `dividirEmGrupos([], 3)` → deve resultar em **`[]`**
 
 **💡 Dicas** (use só se travar):
 
@@ -2548,8 +2544,8 @@ Crie `contarPropriedades(obj)` que retorna quantas chaves o objeto tem.
 
 **✅ Resultado esperado** — o exercício está certo quando:
 
-- `contarPropriedades({ a: 1, b: 2 })` → deve resultar em **`2`** _({a:1, b:2} → 2)_
-- `contarPropriedades({})` → deve resultar em **`0`** _({} → 0)_
+- `contarPropriedades({ a: 1, b: 2 })` → deve resultar em **`2`**
+- `contarPropriedades({})` → deve resultar em **`0`**
 
 **💡 Dicas** (use só se travar):
 
@@ -2905,6 +2901,17 @@ console.log(totalPago); // 320
 
 ## Exercícios
 
+> 📦 Vários exercícios de hoje usam esta **lista de produtos de exemplo** (chamada de `produtos` nos resultados):
+
+```js
+const produtos = [
+  { nome: 'Teclado', preco: 150, categoria: 'perifericos' },
+  { nome: 'Mouse', preco: 80, categoria: 'perifericos' },
+  { nome: 'Monitor', preco: 900, categoria: 'telas' },
+  { nome: 'Cabo HDMI', preco: 30, categoria: 'acessorios' },
+];
+```
+
 ### Exercício 8.1 — Dobrar com map
 *map, filter, reduce e cia. · Fácil*
 
@@ -2920,8 +2927,8 @@ function dobrarTodos(numeros) {
 
 **✅ Resultado esperado** — o exercício está certo quando:
 
-- `dobrarTodos([1, 2, 3])` → deve resultar em **`[ 2, 4, 6 ]`** _([1, 2, 3] → [2, 4, 6])_
-- `dobrarTodos([])` → deve resultar em **`[]`** _([] → [])_
+- `dobrarTodos([1, 2, 3])` → deve resultar em **`[ 2, 4, 6 ]`**
+- `dobrarTodos([])` → deve resultar em **`[]`**
 - 📏 Regra de código: Usou map
 
 **💡 Dicas** (use só se travar):
@@ -2937,8 +2944,8 @@ Crie `apenasPares(numeros)` usando `filter`.
 
 **✅ Resultado esperado** — o exercício está certo quando:
 
-- `apenasPares([1, 2, 3, 4, 5, 6])` → deve resultar em **`[ 2, 4, 6 ]`** _([1..6] → [2, 4, 6])_
-- `apenasPares([1, 3])` → deve resultar em **`[]`** _(sem pares → [])_
+- `apenasPares([1, 2, 3, 4, 5, 6])` → deve resultar em **`[ 2, 4, 6 ]`**
+- `apenasPares([1, 3])` → deve resultar em **`[]`**
 - 📏 Regra de código: Usou filter
 
 **💡 Dicas** (use só se travar):
@@ -2954,8 +2961,8 @@ Crie `somaTotal(numeros)` usando `reduce`. Para array vazio, retorne 0.
 
 **✅ Resultado esperado** — o exercício está certo quando:
 
-- `somaTotal([1, 2, 3])` → deve resultar em **`6`** _([1, 2, 3] → 6)_
-- `somaTotal([])` → deve resultar em **`0`** _([] → 0)_
+- `somaTotal([1, 2, 3])` → deve resultar em **`6`**
+- `somaTotal([])` → deve resultar em **`0`**
 - 📏 Regra de código: Usou reduce
 
 **💡 Dicas** (use só se travar):
@@ -2985,20 +2992,8 @@ function nomesBaratos(produtos, limite) {
 
 **✅ Resultado esperado** — o exercício está certo quando:
 
-- **limite 100** → resultado esperado: `[ 'Mouse', 'Cabo HDMI' ]`
-
-  Teste executado pelo app:
-
-  ```js
-  nomesBaratos([{ nome: 'Teclado', preco: 150, categoria: 'perifericos' }, { nome: 'Mouse', preco: 80, categoria: 'perifericos' }, { nome: 'Monitor', preco: 900, categoria: 'telas' }, { nome: 'Cabo HDMI', preco: 30, categoria: 'acessorios' }], 100)
-  ```
-- **limite 10** → resultado esperado: `[]`
-
-  Teste executado pelo app:
-
-  ```js
-  nomesBaratos([{ nome: 'Teclado', preco: 150, categoria: 'perifericos' }, { nome: 'Mouse', preco: 80, categoria: 'perifericos' }, { nome: 'Monitor', preco: 900, categoria: 'telas' }, { nome: 'Cabo HDMI', preco: 30, categoria: 'acessorios' }], 10)
-  ```
+- `nomesBaratos(produtos, 100)` → deve resultar em **`[ 'Mouse', 'Cabo HDMI' ]`** _(limite 100)_
+- `nomesBaratos(produtos, 10)` → deve resultar em **`[]`** _(limite 10)_
 - 📏 Regra de código: Usou filter e map
 
 **💡 Dicas** (use só se travar):
@@ -3015,7 +3010,7 @@ Crie `buscarPorId(usuarios, id)` que retorna o usuário com aquele id usando `fi
 **✅ Resultado esperado** — o exercício está certo quando:
 
 - `buscarPorId([{ id: 1, nome: 'Ana' }, { id: 2, nome: 'Bia' }], 2)` → deve resultar em **`{ id: 2, nome: 'Bia' }`** _(acha id 2)_
-- `buscarPorId([{ id: 1 }], 5)` → deve resultar em **`null`** _(id inexistente → null)_
+- `buscarPorId([{ id: 1 }], 5)` → deve resultar em **`null`**
 - 📏 Regra de código: Usou find
 
 **💡 Dicas** (use só se travar):
@@ -3060,13 +3055,7 @@ Crie `ordenarPorPreco(produtos)` que retorna um **novo** array ordenado do mais 
 
 **✅ Resultado esperado** — o exercício está certo quando:
 
-- **ordem por preço** → resultado esperado: `[ 'Cabo HDMI', 'Mouse', 'Teclado', 'Monitor' ]`
-
-  Teste executado pelo app:
-
-  ```js
-  ordenarPorPreco([{ nome: 'Teclado', preco: 150, categoria: 'perifericos' }, { nome: 'Mouse', preco: 80, categoria: 'perifericos' }, { nome: 'Monitor', preco: 900, categoria: 'telas' }, { nome: 'Cabo HDMI', preco: 30, categoria: 'acessorios' }]).map(p => p.nome)
-  ```
+- `ordenarPorPreco(produtos).map(p => p.nome)` → deve resultar em **`[ 'Cabo HDMI', 'Mouse', 'Teclado', 'Monitor' ]`** _(ordem por preço)_
 - **original intacto** → resultado esperado: `2`
 
   Teste executado pelo app:
@@ -3099,7 +3088,7 @@ Cada item do carrinho é `{ nome, preco, qtd }`. Crie `totalCarrinho(itens)` que
   ```js
   totalCarrinho([{ nome: 'Café', preco: 20, qtd: 2 }, { nome: 'Pão', preco: 1.5, qtd: 4 }])
   ```
-- `totalCarrinho([])` → deve resultar em **`0`** _(vazio → 0)_
+- `totalCarrinho([])` → deve resultar em **`0`**
 
 **💡 Dicas** (use só se travar):
 
@@ -3118,14 +3107,8 @@ Crie `agruparPorCategoria(produtos)` que retorna um objeto cujas chaves são cat
 
 **✅ Resultado esperado** — o exercício está certo quando:
 
-- **agrupa** → resultado esperado: `{ perifericos: [ 'Teclado', 'Mouse' ], telas: [ 'Monitor' ], acessorios: [ 'Cabo HDMI' ] }`
-
-  Teste executado pelo app:
-
-  ```js
-  agruparPorCategoria([{ nome: 'Teclado', preco: 150, categoria: 'perifericos' }, { nome: 'Mouse', preco: 80, categoria: 'perifericos' }, { nome: 'Monitor', preco: 900, categoria: 'telas' }, { nome: 'Cabo HDMI', preco: 30, categoria: 'acessorios' }])
-  ```
-- `agruparPorCategoria([])` → deve resultar em **`{}`** _(vazio → {})_
+- `agruparPorCategoria(produtos)` → deve resultar em **`{ perifericos: [ 'Teclado', 'Mouse' ], telas: [ 'Monitor' ], acessorios: [ 'Cabo HDMI' ] }`** _(agrupa)_
+- `agruparPorCategoria([])` → deve resultar em **`{}`**
 
 **💡 Dicas** (use só se travar):
 
@@ -3305,8 +3288,8 @@ function criarMultiplicador(fator) {
 
 **✅ Resultado esperado** — o exercício está certo quando:
 
-- `criarMultiplicador(2)(5)` → deve resultar em **`10`** _(dobro(5) → 10)_
-- `(() => { const triplo = criarMultiplicador(3); return triplo(7); })()` → deve resultar em **`21`** _(triplo(7) → 21)_
+- `criarMultiplicador(2)(5)` → deve resultar em **`10`**
+- `(() => { const triplo = criarMultiplicador(3); return triplo(7); })()` → deve resultar em **`21`**
 - `typeof criarMultiplicador(1)` → deve resultar em **`'function'`** _(retorna função)_
 
 **💡 Dicas** (use só se travar):
@@ -3474,9 +3457,7 @@ function memoizar(fn) {
 
   ```js
   (() => { let chamadas = 0;
-  const f = memoizar(n => { chamadas++;
-  return n + 1;
-  });
+  const f = memoizar(n => { chamadas++; return n + 1; });
   f(1);
   f(1);
   f(2);
@@ -3490,9 +3471,7 @@ function memoizar(fn) {
 
   ```js
   (() => { let chamadas = 0;
-  const f = memoizar(() => { chamadas++;
-  return 0;
-  });
+  const f = memoizar(() => { chamadas++; return 0; });
   f(5);
   f(5);
   return chamadas;
@@ -4246,8 +4225,8 @@ Crie `lerJSON(texto)` que retorna o objeto convertido, ou `null` se o texto não
 **✅ Resultado esperado** — o exercício está certo quando:
 
 - `lerJSON('{"a":1}')` → deve resultar em **`{ a: 1 }`** _(válido)_
-- `lerJSON('{a:1}')` → deve resultar em **`null`** _(inválido → null)_
-- `lerJSON('')` → deve resultar em **`null`** _(vazio → null)_
+- `lerJSON('{a:1}')` → deve resultar em **`null`**
+- `lerJSON('')` → deve resultar em **`null`**
 
 **💡 Dicas** (use só se travar):
 
@@ -4263,6 +4242,7 @@ Crie `validarUsuario(usuario)` que lança erros com estas mensagens exatas, na o
 - `'Nome obrigatório'` se não houver nome (ou for só espaços)
 - `'E-mail inválido'` se o e-mail não contiver `@`
 - `'Idade inválida'` se a idade não for um número inteiro entre 0 e 130
+
 Se estiver tudo certo, retorne `true`.
 
 **Código inicial:**
@@ -4732,9 +4712,7 @@ Faça os botões aumentarem e diminuírem o número mostrado no `span`. O valor 
 
   ```js
   (() => { const menos = document.querySelector('#menos');
-  for (let i = 0;
-  i < 5;
-  i++) menos.click();
+  for (let i = 0; i < 5; i++) menos.click();
   return document.querySelector('#valor').textContent;
   })()
   ```
@@ -5104,6 +5082,7 @@ Neste app, o `fetch` é simulado (funciona offline) com uma API de exemplo:
 
 - `https://api.exemplo.com/usuarios` e `/usuarios/1`
 - `https://api.exemplo.com/produtos` e `/produtos/1`
+
 Qualquer outro recurso retorna status 404.
 
 ```js
@@ -5221,9 +5200,9 @@ async function nomeDoUsuario(id) {
 
 **✅ Resultado esperado** — o exercício está certo quando:
 
-- `nomeDoUsuario(1)` → deve resultar em **`'Ana'`** _(id 1 → "Ana")_
-- `nomeDoUsuario(3)` → deve resultar em **`'Carla'`** _(id 3 → "Carla")_
-- `nomeDoUsuario(99)` → deve resultar em **`null`** _(id 99 → null)_
+- `nomeDoUsuario(1)` → deve resultar em **`'Ana'`**
+- `nomeDoUsuario(3)` → deve resultar em **`'Carla'`**
+- `nomeDoUsuario(99)` → deve resultar em **`null`**
 - 📏 Regra de código: Usou await
 
 **💡 Dicas** (use só se travar):
@@ -5285,8 +5264,8 @@ Dica: `fetch('https://url-invalida')` lança erro no simulador.
 **✅ Resultado esperado** — o exercício está certo quando:
 
 - `buscarProduto(2)` → deve resultar em **`{ id: 2, nome: 'Mouse', preco: 80 }`** _(produto 2)_
-- `buscarProduto(50)` → deve resultar em **`null`** _(inexistente → null)_
-- `buscarProduto('abc')` → deve resultar em **`null`** _(id inválido (erro de rede) → null)_
+- `buscarProduto(50)` → deve resultar em **`null`**
+- `buscarProduto('abc')` → deve resultar em **`null`**
 
 **💡 Dicas** (use só se travar):
 
@@ -5301,9 +5280,9 @@ Crie `async function somaDosPrecos(ids)` que busca todos os produtos **em parale
 
 **✅ Resultado esperado** — o exercício está certo quando:
 
-- `somaDosPrecos([1, 3])` → deve resultar em **`1050`** _(ids 1 e 3 → 1050)_
-- `somaDosPrecos([1, 2, 3])` → deve resultar em **`1130`** _(todos → 1130)_
-- `somaDosPrecos([])` → deve resultar em **`0`** _(vazio → 0)_
+- `somaDosPrecos([1, 3])` → deve resultar em **`1050`**
+- `somaDosPrecos([1, 2, 3])` → deve resultar em **`1130`**
+- `somaDosPrecos([])` → deve resultar em **`0`**
 - 📏 Regra de código: Usou Promise.all
 
 **💡 Dicas** (use só se travar):
@@ -5349,10 +5328,7 @@ Crie `async function tentarAte(fn, tentativas)` que chama a função assíncrona
 
   ```js
   (async () => { let n = 0;
-  const r = await tentarAte(async () => { n++;
-  if (n < 3) throw new Error('falhou');
-  return 'ok ' + n;
-  }, 5);
+  const r = await tentarAte(async () => { n++; if (n < 3) throw new Error('falhou'); return 'ok ' + n; }, 5);
   return r;
   })()
   ```
@@ -5362,9 +5338,7 @@ Crie `async function tentarAte(fn, tentativas)` que chama a função assíncrona
 
   ```js
   (async () => { let n = 0;
-  try { await tentarAte(async () => { n++;
-  throw new Error('erro ' + n);
-  }, 2);
+  try { await tentarAte(async () => { n++; throw new Error('erro ' + n); }, 2);
   } catch (e) { return [e.message, n];
   } })()
   ```
@@ -5950,6 +5924,7 @@ Adicione à classe:
 
 - `exportar()` → texto JSON com o array de tarefas
 - `static importar(json)` → cria um novo `GerenciadorTarefas` com as tarefas do JSON; os próximos ids devem continuar a partir do maior id importado. Se o JSON for inválido, lance `Error('Arquivo inválido')`.
+
 Dica: como `#tarefas` é privado, `importar` pode criar a instância e usar um método interno — métodos estáticos **podem** acessar campos privados de instâncias da própria classe.
 
 **Código inicial:**
