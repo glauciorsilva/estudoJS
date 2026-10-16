@@ -67,7 +67,7 @@ console.log(2 + 3);
 console.log('A soma é', 2 + 3);
 ```
 
-Textos (strings) vão entre aspas simples `'...'`, duplas `"..."` ou crases ``...``. Números não usam aspas.
+Textos (strings) vão entre aspas simples `'...'`, duplas `"..."` ou crases `` `...` ``. Números não usam aspas.
 
 ### 1.3 Variáveis: let e const
 
@@ -289,7 +289,7 @@ Meu nome é Rafa e tenho 30 anos.
 
 **💡 Dicas** (use só se travar):
 
-1. Crase é a tecla ``` (no celular, use a barra de símbolos acima do teclado).
+1. Crase é a tecla `` ` `` (no celular, use a barra de símbolos acima do teclado).
 2. Dentro da crase: `${nome}` insere o valor da variável.
 
 ---
@@ -403,9 +403,9 @@ const desconto = 15; // em %
 
 5. Qual linha monta corretamente um texto com variável?
    a) `'Olá ${nome}'`
-   b) ``Olá ${nome}``
+   b) `` `Olá ${nome}` ``
    c) `"Olá {nome}"`
-   d) ``Olá $nome``
+   d) `` `Olá $nome` ``
 
 ## Desafio extra
 
@@ -4607,9 +4607,8 @@ console.log(document.body.innerHTML);
 HTML da página:
 
 ```
-Olá
-texto antigo
-
+<h1 id="titulo">Olá</h1>
+<p id="sub">texto antigo</p>
 ```
 
 Mude o texto do `h1` para `Bem-vindo ao DOM` e o do parágrafo para `JavaScript manipulando a página`.
@@ -4640,7 +4639,7 @@ const titulo = document.querySelector('#titulo');
 ### Exercício 12.2 — Mexendo em classes
 *DOM e eventos · Fácil*
 
-HTML: `Atenção!`
+HTML: `<p id="aviso" class="aviso oculto">Atenção!</p>`
 
 Remova a classe `oculto` e adicione a classe `destaque`.
 
@@ -4665,9 +4664,9 @@ Remova a classe `oculto` e adicione a classe `destaque`.
 ### Exercício 12.3 — Criar lista a partir de dados
 *DOM e eventos · Médio*
 
-HTML: ``
+HTML: `<ul id="lista"></ul>`
 
-Para cada fruta do array, crie um `` com o nome e adicione na lista. Use `createElement`.
+Para cada fruta do array, crie um `<li>` com o nome e adicione na lista. Use `createElement`.
 
 **HTML da página (simulada):**
 
@@ -4699,9 +4698,9 @@ const frutas = ['maçã', 'banana', 'uva'];
 HTML:
 
 ```
--
-0
-+
+<button id="menos">-</button>
+<span id="valor">0</span>
+<button id="mais">+</button>
 ```
 
 Faça os botões aumentarem e diminuírem o número mostrado no `span`. O valor nunca pode ficar negativo.
@@ -4754,10 +4753,11 @@ Faça os botões aumentarem e diminuírem o número mostrado no `span`. O valor 
 HTML:
 
 ```
-
-  
-  Saudar
-
+<form id="form">
+  <input id="nome">
+  <button>Saudar</button>
+</form>
+<p id="saida"></p>
 ```
 
 Ao enviar o formulário (`submit`): impeça o recarregamento, leia o nome (sem espaços nas pontas) e mostre `Olá, Ana!` no parágrafo. Se o nome estiver vazio, mostre `Digite seu nome`.
@@ -4817,7 +4817,7 @@ const form = document.querySelector('#form');
 ### Exercício 12.6 — Lista de tarefas com delegação
 *DOM e eventos · Médio*
 
-HTML: uma `` com 3 ``.
+HTML: uma `<ul id="tarefas">` com 3 `<li>`.
 
 Com **um único** `addEventListener` na `ul`, faça com que clicar num `li` alterne a classe `feita`.
 
@@ -4874,14 +4874,13 @@ Com **um único** `addEventListener` na `ul`, faça com que clicar num `li` alte
 ### Exercício 12.7 — Renderizar vitrine de produtos
 *DOM e eventos · Desafio*
 
-Crie `renderizar(produtos)` que preenche `` com um card por produto:
+Crie `renderizar(produtos)` que preenche `<div id="vitrine">` com um card por produto:
 
 ```
-
-  Teclado
-  
-R$ 150.00
-
+<div class="card">
+  <h3>Teclado</h3>
+  <p>R$ 150.00</p>
+</div>
 ```
 
 Chamar `renderizar` de novo deve **substituir** os cards (não duplicar). Use `textContent` para os textos (segurança!).
@@ -4942,7 +4941,7 @@ renderizar([{ nome: 'Teclado', preco: 150 }, { nome: 'Mouse', preco: 80 }]);
 ### Exercício 12.8 — Filtro ao digitar
 *DOM e eventos · Desafio*
 
-HTML: um `` e uma lista `` com Ana, Bruno, Carla e Mariana.
+HTML: um `<input id="busca">` e uma lista `<ul id="nomes">` com Ana, Bruno, Carla e Mariana.
 
 No evento `input`, adicione a classe `oculto` aos `li` que **não** contêm o texto digitado (sem diferenciar maiúsculas) e remova dos que contêm.
 
@@ -6087,12 +6086,14 @@ async function sincronizar(tarefas, enviar) {
 A classe está pronta. Ligue-a à página:
 
 ```
-  ... 
-
+<form id="nova"> <input id="titulo"> <select id="prioridade">...</select> </form>
+<p id="erro"></p>
+<ul id="lista"></ul>
+<p id="resumo"></p>
 ```
 
 - No `submit`: adicione a tarefa (título + prioridade do select), limpe o input e o erro e re-renderize. Se der erro, mostre a mensagem em `#erro`.
-- `renderizar()`: um `` por tarefa com o título como texto e `data-id` com o id; tarefas concluídas recebem a classe `concluida`.
+- `renderizar()`: um `<li>` por tarefa com o título como texto e `data-id` com o id; tarefas concluídas recebem a classe `concluida`.
 - Clicar num `li` conclui a tarefa (delegação).
 - `#resumo` mostra `1 de 3 concluídas`.
 
@@ -6361,7 +6362,7 @@ const precoFinal = preco - valorDesconto;
 2. **b)** 1 — `%` é o resto da divisão: 10 = 3×3 + **1**.
 3. **b)** '53' — Quando um dos lados é string, `+` concatena.
 4. **c)** 'object' — É um bug histórico do JavaScript mantido por compatibilidade.
-5. **b)** ``Olá ${nome}`` — A interpolação `${}` só funciona com crases.
+5. **b)** `` `Olá ${nome}` `` — A interpolação `${}` só funciona com crases.
 
 ### Dia 2 — Decisões: condicionais e lógica
 

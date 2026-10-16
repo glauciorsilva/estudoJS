@@ -12,20 +12,23 @@ const DIF = ['', 'Fácil', 'Médio', 'Desafio'];
 
 // HTML simples do conteúdo → Markdown
 function md(html = '') {
+  const guardados = [];
+  const guardar = (txt) => `\u0000${guardados.push(txt) - 1}\u0000`;
+  const span = (c) => (c.includes('`') ? '`` ' + c + ' ``' : '`' + c + '`');
   return html
-    .replace(/<pre>([\s\S]*?)<\/pre>/g, (_, c) => `\n\n\`\`\`\n${decode(c.replace(/<[^>]+>/g, ''))}\n\`\`\`\n\n`)
+    .replace(/<pre>([\s\S]*?)<\/pre>/g, (_, c) => guardar(`\n\n\`\`\`\n${decode(c.replace(/<[^>]+>/g, ''))}\n\`\`\`\n\n`))
+    .replace(/<(code|kbd)>([\s\S]*?)<\/\1>/g, (_, t, c) => guardar(span(decode(c))))
     .replace(/<li>/g, '\n- ')
     .replace(/<\/li>|<\/?ul>|<\/?ol>/g, '')
     .replace(/<\/p>\s*<p>/g, '\n\n')
     .replace(/<\/?p>/g, '\n')
     .replace(/<(strong|b)>([\s\S]*?)<\/\1>/g, '**$2**')
     .replace(/<(em|i)>([\s\S]*?)<\/\1>/g, '*$2*')
-    .replace(/<kbd>([\s\S]*?)<\/kbd>/g, '`$1`')
-    .replace(/<code>([\s\S]*?)<\/code>/g, (_, c) => '`' + decode(c) + '`')
     .replace(/<sup>([\s\S]*?)<\/sup>/g, '^$1')
     .replace(/<br\s*\/?>/g, '\n')
     .replace(/<[^>]+>/g, '')
     .replace(/&(lt|gt|amp|quot|#39);/g, (m) => decode(m))
+    .replace(/\u0000(\d+)\u0000/g, (_, i) => guardados[i])
     .replace(/\n{3,}/g, '\n\n')
     .trim();
 }
