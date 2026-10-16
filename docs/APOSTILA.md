@@ -1125,7 +1125,7 @@ function inverterTexto(texto) {
 
 ---
 
-### Exercício 3.8 — Escada de #
+### Exercício 3.8 — Escada de \#
 *Laços de repetição · Médio*
 
 Complete `escada(n)` para retornar um texto com n degraus separados por quebra de linha (`'\n'`). Para n = 3:
@@ -6524,7 +6524,7 @@ function inverterTexto(texto) {
 }
 ```
 
-#### 3.8 — Escada de #
+#### 3.8 — Escada de \#
 
 ```js
 function escada(n) {

@@ -10,6 +10,9 @@ import { formatValue } from '../src/runner/runtime.js';
 const OUT = path.resolve('docs');
 const DIF = ['', 'Fácil', 'Médio', 'Desafio'];
 
+// '#' no fim de um título seria lido como marcador de fechamento.
+const titulo = (t) => t.replace(/#$/, '\\#');
+
 // HTML simples do conteúdo → Markdown
 function md(html = '') {
   const guardados = [];
@@ -115,7 +118,7 @@ function exercicios(day) {
   const usaProdutos = day.exercises.some((ex) => ex.tests.some((t) => t.run?.includes(PRODUTOS)));
   return (usaProdutos ? NOTA_PRODUTOS : '') + day.exercises.map((ex, i) => {
     const partes = [
-      `### Exercício ${day.day}.${i + 1} — ${ex.title}`,
+      `### Exercício ${day.day}.${i + 1} — ${titulo(ex.title)}`,
       `*${topicLabel(ex.topic)} · ${DIF[ex.difficulty]}*`,
       '',
       md(ex.prompt),
@@ -133,7 +136,7 @@ function quiz(day) {
 }
 
 function gabarito(day) {
-  const sol = day.exercises.map((ex, i) => `#### ${day.day}.${i + 1} — ${ex.title}\n\n${code(ex.solution)}`).join('\n\n');
+  const sol = day.exercises.map((ex, i) => `#### ${day.day}.${i + 1} — ${titulo(ex.title)}\n\n${code(ex.solution)}`).join('\n\n');
   const q = day.quiz.map((item, i) => `${i + 1}. **${'abcde'[item.answer]})** ${plain(item.options[item.answer])} — ${plain(item.explain)}`).join('\n');
   return `### Dia ${day.day} — ${day.title}\n\n${sol}\n\n**Quiz do dia ${day.day}:**\n\n${q}`;
 }
