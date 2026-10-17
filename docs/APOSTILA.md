@@ -1,6 +1,6 @@
 # Apostila EstudoJS — JavaScript em 15 dias
 
-**Aplicativo:** <https://estudojs.vercel.app> · 15 dias · 130 exercícios · 80 questões de quiz
+**Aplicativo:** <https://jsestudos.vercel.app> · 15 dias · 130 exercícios · 80 questões de quiz
 
 ## Como usar esta apostila
 

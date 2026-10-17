@@ -144,7 +144,7 @@ function gabarito(day) {
 const totalEx = DAYS.reduce((s, d) => s + d.exercises.length, 0);
 const capa = `# Apostila EstudoJS — JavaScript em 15 dias
 
-**Aplicativo:** <https://estudojs.vercel.app> · ${DAYS.length} dias · ${totalEx} exercícios · ${DAYS.reduce((s, d) => s + d.quiz.length, 0)} questões de quiz
+**Aplicativo:** <https://jsestudos.vercel.app> · ${DAYS.length} dias · ${totalEx} exercícios · ${DAYS.reduce((s, d) => s + d.quiz.length, 0)} questões de quiz
 
 ## Como usar esta apostila
 

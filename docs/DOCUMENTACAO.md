@@ -1,6 +1,6 @@
 # EstudoJS — Documentação do aplicativo
 
-**Endereço:** <https://estudojs.vercel.app> · **Código:** <https://github.com/glauciorsilva/estudoJS>
+**Endereço:** <https://jsestudos.vercel.app> · **Código:** <https://github.com/glauciorsilva/estudoJS>
 
 O EstudoJS é um app web para aprender JavaScript em 15 dias **praticando**: aulas curtas, 130 exercícios corrigidos automaticamente, quizzes, diário de estudo, revisão espaçada e um painel que mostra quanto falta e onde estão as dificuldades. Funciona no computador e no celular Android (pode ser instalado como app).
 
@@ -10,7 +10,7 @@ O EstudoJS é um app web para aprender JavaScript em 15 dias **praticando**: aul
 
 ### 1.1 Criar conta e entrar
 
-1. Acesse <https://estudojs.vercel.app>.
+1. Acesse <https://jsestudos.vercel.app>.
 2. Toque em **Criar conta** e informe nome, e-mail e senha. A tela mostra as regras de senha (no momento: pelo menos 6 caracteres, com letra minúscula, letra MAIÚSCULA, número e símbolo, como `Estudo#2026`).
 3. Você recebe um e-mail de confirmação (não é obrigatório para usar).
 4. Nas próximas vezes, use **Entrar**. Esqueceu a senha? Digite o e-mail e toque em **Esqueci minha senha**.
@@ -166,7 +166,7 @@ npm run build      # gera dist/
 npm run apostila   # regenera docs/APOSTILA.md a partir do conteúdo
 ```
 
-Publicação: `git push` na branch conectada à Vercel → deploy automático em <https://estudojs.vercel.app>.
+Publicação: `git push` na branch conectada à Vercel → deploy automático em <https://jsestudos.vercel.app>.
 
 Variáveis de ambiente (arquivo `.env` local e Vercel → Settings → Environment Variables):
 

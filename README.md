@@ -1,6 +1,6 @@
 # EstudoJS — JavaScript em 15 dias
 
-🌐 **Acesse:** <https://estudojs.vercel.app>
+🌐 **Acesse:** <https://jsestudos.vercel.app>
 
 App web para aprender JavaScript **praticando**: aulas curtas, ~130 exercícios com correção automática, quizzes, diário de aprendizagem, revisão espaçada e um painel que mostra **quanto falta** e **onde estão suas dificuldades**. Funciona no desktop e no celular Android (pode ser instalado como app).
 
@@ -49,7 +49,7 @@ Sem configurar o Firebase, o app abre em **modo local** (progresso salvo só naq
    - Alternativa via terminal: `npm i -g firebase-tools && firebase login && firebase use --add && firebase deploy --only firestore:rules`
 7. **Configurações do projeto → Seus apps → Web (`</>`)**: registre o app e copie o objeto `firebaseConfig`.
 8. Copie `.env.example` para `.env` e preencha as variáveis `VITE_FIREBASE_*` com esses valores.
-9. Depois do deploy: **Authentication → Settings → Authorized domains** → adicione o domínio da Vercel (`estudojs.vercel.app`).
+9. Depois do deploy: **Authentication → Settings → Authorized domains** → adicione o domínio da Vercel (`jsestudos.vercel.app`).
 
 > A configuração web do Firebase **não é segredo** (ela vai para o navegador de qualquer forma). Quem protege os dados são as **regras do Firestore**: cada pessoa só lê e grava os próprios dados.
 
