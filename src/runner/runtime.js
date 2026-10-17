@@ -131,6 +131,26 @@ export function deepEqual(a, b, approx = false) {
 // Utilidades
 // ---------------------------------------------------------------------------
 
+// Saída do console como linhas: um console.log com '\n' vale por várias linhas, e
+// espaços no fim de linha e linhas vazias no final (invisíveis na tela) não contam.
+export function linhasDoConsole(textos) {
+  const linhas = textos.join('\n').split('\n').map((l) => l.trimEnd());
+  while (linhas.length && linhas[linhas.length - 1] === '') linhas.pop();
+  return linhas;
+}
+
+// Descreve a primeira linha diferente, com aspas para revelar espaços e maiúsculas.
+export function primeiraDiferenca(recebido, esperado) {
+  const n = Math.max(recebido.length, esperado.length);
+  for (let i = 0; i < n; i++) {
+    if (recebido[i] === esperado[i]) continue;
+    if (i >= recebido.length) return `Faltou a linha ${i + 1}: ${JSON.stringify(esperado[i])}`;
+    if (i >= esperado.length) return `Linha ${i + 1} a mais: ${JSON.stringify(recebido[i])}`;
+    return `Linha ${i + 1}: esperado ${JSON.stringify(esperado[i])}, recebido ${JSON.stringify(recebido[i])}`;
+  }
+  return '';
+}
+
 // Remove comentários de forma simples (usado só nas verificações de "use X / não use Y").
 export function stripComments(code) {
   return code.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`\\])\/\/.*$/gm, '$1');
@@ -326,14 +346,16 @@ export async function runCode({ code, tests = [], checks = [], dom = null }) {
         }
       }
     } else if (t.logs) {
-      const got = logs.map((l) => l.text);
-      r.pass = deepEqual(got, t.logs);
+      const got = linhasDoConsole(logs.map((l) => l.text));
+      const esperado = linhasDoConsole(t.logs);
+      r.pass = deepEqual(got, esperado);
       r.expected = t.logs.join('\n') || '(nenhuma saída)';
       r.received = got.join('\n') || '(nenhuma saída)';
+      if (!r.pass) r.diff = primeiraDiferenca(got, esperado);
       r.isLog = true;
     } else if (t.logsInclude) {
-      const got = logs.map((l) => l.text);
-      const missing = t.logsInclude.filter((x) => !got.includes(x));
+      const got = linhasDoConsole(logs.map((l) => l.text));
+      const missing = t.logsInclude.filter((x) => !got.includes(x.trimEnd()));
       r.pass = missing.length === 0;
       r.expected = `linhas contendo: ${t.logsInclude.join(' | ')}`;
       r.received = got.join('\n') || '(nenhuma saída)';

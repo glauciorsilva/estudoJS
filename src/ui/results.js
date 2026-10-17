@@ -25,7 +25,8 @@ export function renderTests(tests) {
     let detalhe = '';
     if (!t.pass && t.error) detalhe = `<div class="teste-detalhe"><span>Erro:</span> <code>${esc(t.error)}</code></div>`;
     else if (!t.pass && !t.isCheck && t.expected !== undefined) {
-      detalhe = `<div class="teste-detalhe"><div><span>Esperado:</span> <code>${esc(t.expected)}</code></div><div><span>Recebido:</span> <code>${esc(t.received)}</code></div></div>`;
+      const diff = t.diff ? `<div><span>Diferença:</span> <code>${esc(t.diff)}</code></div>` : '';
+      detalhe = `<div class="teste-detalhe">${diff}<div><span>Esperado:</span> <code>${esc(t.expected)}</code></div><div><span>Recebido:</span> <code>${esc(t.received)}</code></div></div>`;
     }
     return `<li class="${t.pass ? 'ok' : 'falhou'}"><span class="teste-icone" aria-hidden="true">${t.pass ? '✓' : '✗'}</span><div><span class="sr-only">${t.pass ? 'Passou:' : 'Falhou:'}</span>${esc(t.name)}${t.isCheck ? ' <span class="tag">regra</span>' : ''}${detalhe}</div></li>`;
   }).join('')}</ul>`;

@@ -63,6 +63,19 @@ describe('runCode', () => {
     expect(r.ok).toBe(true);
   });
 
+  it('compara o console por linhas, ignorando o que não aparece na tela', async () => {
+    const tests = [{ name: 'l', logs: ['1', '2', 'Fizz'] }];
+    const umLog = await runCode({ code: 'console.log("1\\n2\\nFizz\\n")', tests });
+    expect(umLog.ok).toBe(true);
+    const espaco = await runCode({ code: 'console.log(1); console.log(2); console.log("Fizz ")', tests });
+    expect(espaco.ok).toBe(true);
+    const errado = await runCode({ code: 'console.log(1); console.log(2); console.log("fizz")', tests });
+    expect(errado.ok).toBe(false);
+    expect(errado.tests[0].diff).toBe('Linha 3: esperado "Fizz", recebido "fizz"');
+    const faltando = await runCode({ code: 'console.log(1); console.log(2)', tests });
+    expect(faltando.tests[0].diff).toBe('Faltou a linha 3: "Fizz"');
+  });
+
   it('fetch simulado', async () => {
     const r = await runCode({ code: 'const r = await fetch("https://api.exemplo.com/produtos/1"); console.log((await r.json()).nome)' });
     expect(r.logs[0].text).toBe('Teclado');
