@@ -180,6 +180,13 @@ export function saveProfile(patch) {
   emit();
 }
 
+/** Resumo do progresso guardado no perfil (lido pela tela do administrador). Não dispara render. */
+export function saveSummary(resumo) {
+  if (JSON.stringify(state.profile.resumo) === JSON.stringify(resumo)) return;
+  state.profile.resumo = resumo;
+  backend.save('profile', 'me');
+}
+
 export function updateProgress(exerciseId, updater) {
   const current = state.progress[exerciseId] ? { ...state.progress[exerciseId] } : {};
   state.progress[exerciseId] = updater(current) || current;

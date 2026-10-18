@@ -2,6 +2,7 @@
 import { esc } from './dom.js';
 import { getState, getSyncStatus } from '../data/store.js';
 import { dueReviews } from '../data/progress.js';
+import { isAdminEmail } from '../config.js';
 
 const NAV = [
   { hash: '#/', label: 'Painel', icon: '🏠', match: /^\/$/ },
@@ -16,7 +17,10 @@ const SYNC_LABEL = { ok: 'Progresso salvo', salvando: 'Salvando…', erro: 'Erro
 export function shell(path, content) {
   const { user, profile } = getState();
   const due = dueReviews().length;
-  const links = NAV.map((n) => {
+  const itens = user && !user.local && isAdminEmail(user.email)
+    ? [...NAV, { hash: '#/admin', label: 'Admin', icon: '🛡️', match: /^\/admin/ }]
+    : NAV;
+  const links = itens.map((n) => {
     const ativo = n.match.test(path);
     const badge = n.hash === '#/revisao' && due ? `<span class="badge" aria-label="${due} revisões pendentes">${due}</span>` : '';
     return `<a href="${n.hash}" class="nav-item${ativo ? ' ativo' : ''}"${ativo ? ' aria-current="page"' : ''}><span class="nav-icone" aria-hidden="true">${n.icon}</span><span class="nav-texto">${n.label}</span>${badge}</a>`;

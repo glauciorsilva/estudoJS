@@ -135,3 +135,19 @@ export function safeSet(key, value) {
 export function safeRemove(key) {
   try { localStorage.removeItem(key); } catch { /* ignora */ }
 }
+
+/** Reenvia o e-mail de confirmação para o usuário logado. */
+export async function resendVerification() {
+  const { auth, sendEmailVerification } = await loadFirebase();
+  if (auth.currentUser) await sendEmailVerification(auth.currentUser);
+}
+
+/** Recarrega o usuário e o token (necessário para as regras enxergarem o e-mail recém-confirmado). */
+export async function refreshVerification() {
+  const { auth } = await loadFirebase();
+  const u = auth.currentUser;
+  if (!u) return false;
+  await u.reload();
+  await u.getIdToken(true);
+  return u.emailVerified;
+}

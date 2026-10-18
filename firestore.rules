@@ -1,6 +1,7 @@
 rules_version = '2';
 
 // Cada pessoa só lê e grava os PRÓPRIOS dados (users/{seu uid}/...).
+// O administrador (e-mail verificado) pode LER os dados de todos, para acompanhar a turma.
 // Publique com: firebase deploy --only firestore:rules
 // (ou cole este conteúdo em Firestore Database → Regras, no console).
 service cloud.firestore {
@@ -10,13 +11,22 @@ service cloud.firestore {
       return request.auth != null && request.auth.uid == uid;
     }
 
+    // Mantenha igual a ADMIN_EMAILS em src/config.js.
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email in ['rafael.glaucio2@gmail.com'];
+    }
+
     // Perfil: users/{uid}
     match /users/{uid} {
-      allow read, write: if isOwner(uid);
+      allow read: if isOwner(uid) || isAdmin();
+      allow write: if isOwner(uid);
 
       // progress, quiz, notes, activity
       match /{colecao}/{docId} {
-        allow read, delete: if isOwner(uid);
+        allow read: if isOwner(uid) || isAdmin();
+        allow delete: if isOwner(uid);
         allow create, update: if isOwner(uid)
           && colecao in ['progress', 'quiz', 'notes', 'activity']
           && request.resource.data.size() <= 40

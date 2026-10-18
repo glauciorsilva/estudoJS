@@ -10,6 +10,7 @@ import { getState, updateProgress, addActivity } from '../data/store.js';
 import { exerciseScore, scheduleAfterPass, scheduleAfterFail } from '../data/progress.js';
 import { startStudyTimer, stopStudyTimer } from '../data/timer.js';
 import { safeGet, safeSet, safeRemove } from '../auth.js';
+import { videoButton, emDificuldade } from '../ui/video.js';
 
 const draftKey = (id) => `estudojs:draft:${getState().user?.uid}:${id}`;
 
@@ -72,7 +73,9 @@ export function exerciseView(root, { match, params }) {
           <div class="ajuda-botoes">
             <button class="btn btn-ghost btn-sm" id="btn-dica" ${dicasVisiveis >= ex.hints.length ? 'hidden' : ''}>💡 Ver dica ${dicasVisiveis + 1} de ${ex.hints.length}</button>
             <button class="btn btn-ghost btn-sm" id="btn-solucao">🔑 Ver solução</button>
+            ${videoButton(ex.topic, { id: 'btn-video', hidden: !emDificuldade(p) })}
           </div>
+          <p class="pequeno muted" id="video-aviso" ${emDificuldade(p) ? '' : 'hidden'}>Está difícil? Assista a uma explicação em vídeo sobre <strong>${esc(topicLabel(ex.topic))}</strong> e depois tente de novo.</p>
           <div id="solucao" hidden></div>
         </div>
       </section>
@@ -97,6 +100,15 @@ export function exerciseView(root, { match, params }) {
     </div>`);
 
   const resultadoEl = root.querySelector('#resultado');
+
+  // O botão de vídeo aparece quando o aluno mostra sinais de dificuldade neste exercício.
+  function atualizarVideo() {
+    const mostrar = emDificuldade(getState().progress[ex.id]);
+    const btn = root.querySelector('#btn-video');
+    if (mostrar && btn.hidden) toast(`Está difícil? Veja um vídeo sobre ${topicLabel(ex.topic)}.`, 'info', 5000);
+    btn.hidden = !mostrar;
+    root.querySelector('#video-aviso').hidden = !mostrar;
+  }
   const btnExecutar = root.querySelector('#btn-executar');
   let salvarRascunho;
 
@@ -190,6 +202,7 @@ export function exerciseView(root, { match, params }) {
       else if (revisao) toast(ajudaNestaSessao ? 'Revisão feita. Ela volta em breve para fixar melhor.' : `Revisão concluída! Próxima em ${p.srs.interval} dia(s).`, 'ok');
     } else {
       root.querySelector('#sucesso').hidden = true;
+      atualizarVideo();
       // Muitas tentativas seguidas: sugerir uma dica
       if (!p.passed && (p.failsBeforePass || 0) >= 4 && dicasVisiveis === 0 && mudouCodigo) {
         toast('Travou? Tudo bem! Abrir uma dica agora é uma boa ideia.', 'info', 5000);
@@ -214,6 +227,7 @@ export function exerciseView(root, { match, params }) {
     ajudaNestaSessao = true;
     root.querySelector('#dicas').insertAdjacentHTML('beforeend', `<div class="dica-box"><strong>Dica ${dicasVisiveis}:</strong> ${ex.hints[dicasVisiveis - 1]}</div>`);
     updateProgress(ex.id, (cur) => ({ ...cur, hintsUsed: Math.max(cur.hintsUsed || 0, dicasVisiveis) }));
+    atualizarVideo();
     if (dicasVisiveis >= ex.hints.length) btnDica.hidden = true;
     else btnDica.textContent = `💡 Ver dica ${dicasVisiveis + 1} de ${ex.hints.length}`;
   });
@@ -234,6 +248,7 @@ export function exerciseView(root, { match, params }) {
         return n;
       });
     }
+    atualizarVideo();
     box.hidden = false;
     box.innerHTML = '<p class="pequeno muted">Leia, entenda, feche e escreva de memória — não copie e cole.</p><div class="editor editor-solucao"></div>';
     createEditor(box.querySelector('.editor-solucao'), { doc: ex.solution, readOnly: true, label: 'Solução' });

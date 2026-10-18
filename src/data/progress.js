@@ -73,8 +73,8 @@ export function dueReviews() {
 // Dias e tópicos
 // ---------------------------------------------------------------------------
 
-export function dayStats(day) {
-  const { progress, quiz } = getState();
+export function dayStats(day, st = getState()) {
+  const { progress, quiz } = st;
   const total = day.exercises.length;
   const passed = day.exercises.filter((e) => progress[e.id]?.passed).length;
   const attempted = day.exercises.filter((e) => progress[e.id]?.attempts).length;
@@ -87,8 +87,8 @@ export function dayStats(day) {
   return { total, passed, attempted, score, quizBest, quizDone, exercisesDone, status, ratio: passed / total };
 }
 
-export function topicStats() {
-  const { progress } = getState();
+export function topicStats(st = getState()) {
+  const { progress } = st;
   const map = {};
   for (const id of Object.keys(TOPICS)) map[id] = { id, label: TOPICS[id].label, day: TOPICS[id].day, total: 0, passed: 0, attempted: 0, scoreSum: 0, fails: 0, hints: 0, solutions: 0, timeSec: 0 };
   for (const e of EXERCISES) {
@@ -112,8 +112,8 @@ export function topicStats() {
 }
 
 /** Tópicos onde você mais precisa de reforço, com o motivo. */
-export function weakTopics(limit = 3) {
-  return topicStats()
+export function weakTopics(limit = 3, st = getState()) {
+  return topicStats(st)
     .filter((t) => t.attempted > 0)
     .map((t) => {
       const reasons = [];
@@ -140,8 +140,8 @@ export function practiceFor(topicId, limit = 5) {
 }
 
 /** Tipos de erro mais frequentes. */
-export function errorProfile(limit = 6) {
-  const { progress } = getState();
+export function errorProfile(limit = 6, st = getState()) {
+  const { progress } = st;
   const total = {};
   for (const p of Object.values(progress)) {
     for (const [kind, n] of Object.entries(p.errors || {})) total[kind] = (total[kind] || 0) + n;
@@ -156,12 +156,12 @@ export function errorProfile(limit = 6) {
 // Visão geral e plano
 // ---------------------------------------------------------------------------
 
-export function overview() {
-  const { progress, quiz, activity, profile } = getState();
+export function overview(st = getState()) {
+  const { progress, quiz, activity, profile } = st;
   const totalEx = EXERCISES.length;
   const passed = EXERCISES.filter((e) => progress[e.id]?.passed).length;
   const quizzesPassed = DAYS.filter((d) => (quiz[`d${d.day}`]?.best ?? 0) >= QUIZ_PASS).length;
-  const days = DAYS.map((d) => ({ day: d, stats: dayStats(d) }));
+  const days = DAYS.map((d) => ({ day: d, stats: dayStats(d, st) }));
   const completedDays = days.filter((d) => d.stats.status === 'concluido').length;
   const currentDay = days.find((d) => d.stats.status !== 'concluido')?.day.day ?? 15;
 
@@ -180,13 +180,14 @@ export function overview() {
 
   return {
     totalEx, passed, quizzesPassed, completedDays, currentDay, expectedDay, startDate,
-    totalSeconds, todaySeconds, hoursLeft, percent, streak: streak(), days,
+    totalSeconds, todaySeconds, hoursLeft, percent, streak: streak(st), days,
+    totalTasks: totalEx + DAYS.length, doneTasks: passed + quizzesPassed,
     pace: currentDay - expectedDay, // < 0 = atrasado
   };
 }
 
-export function streak() {
-  const { activity } = getState();
+export function streak(st = getState()) {
+  const { activity } = st;
   const ativo = (k) => (activity[k]?.seconds || 0) >= 300 || (activity[k]?.solved || 0) > 0;
   let dia = todayKey();
   if (!ativo(dia)) dia = addDays(dia, -1); // hoje ainda pode ser feito

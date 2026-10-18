@@ -52,14 +52,15 @@ export function progressBar(ratio, label = '') {
   return `<div class="barra" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="${esc(label || `${pct}%`)}"><span style="width:${pct}%"></span></div>`;
 }
 
-export function ring(percent, size = 120, label = '') {
+/** Anel de progresso. `texto` substitui o "NN%" do centro (ex.: "12/145"). */
+export function ring(percent, size = 120, label = '', texto = null) {
   const r = 52;
   const c = 2 * Math.PI * r;
   const off = c * (1 - Math.max(0, Math.min(100, percent)) / 100);
-  return `<svg class="anel" width="${size}" height="${size}" viewBox="0 0 120 120" role="img" aria-label="${esc(label)} ${percent}%">
+  return `<svg class="anel" width="${size}" height="${size}" viewBox="0 0 120 120" role="img" aria-label="${esc(texto ? `${texto} ${label}` : `${label} ${percent}%`)}">
     <circle cx="60" cy="60" r="${r}" class="anel-fundo"/>
     <circle cx="60" cy="60" r="${r}" class="anel-valor" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"/>
-    <text x="60" y="58" text-anchor="middle" class="anel-num">${percent}%</text>
+    <text x="60" y="58" text-anchor="middle" class="anel-num${texto && texto.length > 5 ? ' anel-num-longo' : ''}">${esc(texto ?? `${percent}%`)}</text>
     <text x="60" y="78" text-anchor="middle" class="anel-legenda">${esc(label)}</text>
   </svg>`;
 }

@@ -31,7 +31,7 @@ export function accountView(root) {
 
     <section class="painel">
       <h2>Dados</h2>
-      <p class="pequeno muted">${user.local ? 'Modo local: seu progresso está salvo apenas neste navegador. Faça backup de vez em quando.' : 'Seu progresso é salvo no Firebase e sincroniza entre seus dispositivos.'}</p>
+      <p class="pequeno muted">${user.local ? 'Modo local: seu progresso está salvo apenas neste navegador. Faça backup de vez em quando.' : 'Seu progresso é salvo no Firebase e sincroniza entre seus dispositivos. O administrador da turma pode acompanhar seu progresso (exercícios, tentativas, código e diário) para ajudar nos estudos.'}</p>
       <div class="botoes">
         <button class="btn btn-ghost" id="exportar">⬇️ Baixar backup (JSON)</button>
         <button class="btn btn-danger" id="zerar">🗑️ Zerar progresso</button>

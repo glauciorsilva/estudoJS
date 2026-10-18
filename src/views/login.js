@@ -25,6 +25,7 @@ export function loginView(root, { onLocalLogin }) {
           <span class="pequeno muted" data-so="criar" hidden id="regras-senha">Mínimo de ${SENHA_MIN} caracteres.</span>
         </label>
         <label data-so="criar" hidden>Confirmar senha<input type="password" id="senha2" autocomplete="new-password"></label>
+        <p class="pequeno muted" data-so="criar" hidden>Ao criar a conta, seu progresso poderá ser acompanhado pelo administrador da turma.</p>
         <p class="erro-form" id="erro" role="alert"></p>
         <button class="btn btn-primary btn-bloco" id="enviar">Entrar</button>
         <button type="button" class="link" id="esqueci" data-so="entrar">Esqueci minha senha</button>

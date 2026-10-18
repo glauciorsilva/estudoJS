@@ -61,6 +61,10 @@ Seu código fica salvo automaticamente; dá para sair e voltar depois.
 - **Sequência 🔥**: dias seguidos com pelo menos 5 minutos de estudo ou um exercício resolvido.
 - **Tipos de erro**: cada execução com erro é classificada (nome de variável errado, acesso a `undefined`, sintaxe, loop infinito, resultado errado…) para mostrar seus padrões.
 
+### 1.5.1 Travou? Veja um vídeo
+
+Quando você erra o mesmo exercício 3 vezes, abre 2 dicas ou vê a solução, aparece o botão **🎬 Veja um vídeo**: uma aula em português no YouTube sobre o assunto do exercício. Os tópicos em “Onde focar”, no Painel, também têm o botão. A lista de vídeos fica em `src/content/videos.js`.
+
 ### 1.6 Revisão espaçada
 
 Cada exercício resolvido volta na aba **Revisão**: em 3 dias se você foi bem, ou no dia seguinte se usou a solução. A cada revisão bem-sucedida **sem ajuda**, o intervalo cresce (cerca de 2,5×). Na revisão o editor começa vazio: você precisa lembrar. É isso que fixa o conhecimento.
@@ -155,6 +159,15 @@ Gravações são agrupadas (cerca de 1,2 s) e enviadas também ao esconder/fecha
 - **XSS**: textos do usuário são sempre escapados; a pré-visualização de DOM roda num iframe sem scripts.
 - **Cabeçalhos HTTP** (`vercel.json`): `X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options: DENY`, `Permissions-Policy`.
 - A configuração web do Firebase não é segredo; mesmo assim fica fora do Git (`.env`) e é cadastrada nas variáveis de ambiente da Vercel.
+
+### 2.5.1 Administrador
+
+O e-mail listado em `ADMIN_EMAILS` (`src/config.js`) e na função `isAdmin()` do `firestore.rules` vê o menu **🛡️ Admin**:
+
+- **Lista de alunos**: tarefas feitas / total, etapa, tempo de estudo, última atividade e dificuldades (lidas do campo `resumo` do perfil, atualizado pelo app do aluno).
+- **Detalhe do aluno**: cada exercício (tentativas, dicas, solução vista, tempo, último código), notas dos quizzes, diário, erros mais comuns e tópicos com dificuldade.
+
+O acesso é **somente leitura** e exige **e-mail confirmado** (a tela oferece reenviar a confirmação). Para trocar ou adicionar administradores, altere as duas listas e publique as regras.
 
 ### 2.6 Rodar, testar e publicar
 

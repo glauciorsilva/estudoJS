@@ -17,3 +17,8 @@ export const firebaseEnabled = Boolean(firebaseConfig.apiKey && firebaseConfig.p
 // Para fechar (só o administrador cria contas), defina VITE_ALLOW_SIGNUP=false
 // e desative "Enable create (sign-up)" no Firebase Authentication.
 export const allowSignup = env.VITE_ALLOW_SIGNUP !== 'false';
+
+// Administradores: veem o progresso de todos os alunos (somente leitura).
+// A permissão real está no firestore.rules — mantenha as duas listas iguais.
+export const ADMIN_EMAILS = ['rafael.glaucio2@gmail.com'];
+export const isAdminEmail = (email) => ADMIN_EMAILS.includes(String(email || '').toLowerCase());

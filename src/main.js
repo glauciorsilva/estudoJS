@@ -3,6 +3,7 @@ import './styles.css';
 import { applyTheme } from './theme.js';
 import { watchAuth } from './auth.js';
 import { initStore, flush } from './data/store.js';
+import { trackSummary } from './data/summary.js';
 import { route, fallback, render } from './router.js';
 import { loginView } from './views/login.js';
 import { dashboardView } from './views/dashboard.js';
@@ -13,6 +14,7 @@ import { reviewView } from './views/review.js';
 import { statsView } from './views/stats.js';
 import { playgroundView } from './views/playground.js';
 import { accountView } from './views/account.js';
+import { adminView, adminUserView } from './views/admin.js';
 
 applyTheme();
 const root = document.getElementById('app');
@@ -25,6 +27,8 @@ route(/^\/revisao$/, reviewView);
 route(/^\/desempenho$/, statsView);
 route(/^\/playground$/, playgroundView);
 route(/^\/conta$/, accountView);
+route(/^\/admin$/, adminView);
+route(/^\/admin\/([\w-]+)$/, adminUserView);
 fallback(dashboardView);
 
 let currentUid = null;
@@ -59,6 +63,7 @@ async function start(user) {
     root.innerHTML = `<div class="carregando"><p>Não foi possível carregar seus dados.</p><p class="pequeno muted">${e.code === 'permission-denied' ? 'Permissão negada: publique as regras do Firestore (firestore.rules).' : 'Verifique sua conexão e tente novamente.'}</p><button class="btn btn-primary" onclick="location.reload()">Tentar de novo</button></div>`;
     return;
   }
+  trackSummary();
   if (!location.hash || location.hash === '#/login') history.replaceState(null, '', '#/');
   addEventListener('hashchange', onRoute);
   onRoute();
