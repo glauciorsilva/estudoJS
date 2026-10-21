@@ -66,3 +66,29 @@ describe('administrador', () => {
     expect(isAdminEmail(undefined)).toBe(false);
   });
 });
+
+describe('sugestões do editor', async () => {
+  const { EditorState } = await import('@codemirror/state');
+  const { CompletionContext } = await import('@codemirror/autocomplete');
+  const { javascript } = await import('@codemirror/lang-javascript');
+  const { sugestoesJS } = await import('../src/ui/completions.js');
+  const sugerir = (doc, explicit = false) => {
+    const state = EditorState.create({ doc, extensions: [javascript()] });
+    const r = sugestoesJS(new CompletionContext(state, doc.length, explicit));
+    return r ? r.options.map((o) => o.label) : [];
+  };
+
+  it('métodos depois do ponto', () => {
+    expect(sugerir('Math.')).toContain('round');
+    expect(sugerir('console.')).toContain('log');
+    expect(sugerir('lista.')).toEqual(expect.arrayContaining(['map', 'filter', 'push']));
+  });
+  it('palavras e modelos ao digitar', () => {
+    expect(sugerir('fo')).toEqual(expect.arrayContaining(['for', 'forof']));
+    expect(sugerir("const s = 'lista.")).toEqual([]); // dentro de texto, não sugere
+  });
+  it('sem nada digitado, só quando pedido, mostra modelos', () => {
+    expect(sugerir('')).toEqual([]);
+    expect(sugerir('', true)[0]).toBe('log');
+  });
+});

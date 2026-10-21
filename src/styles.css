@@ -442,3 +442,4 @@ details.painel > summary { cursor: pointer; list-style-position: inside; }
 details.painel[open] > summary { margin-bottom: 8px; }
 .codigo-admin { max-height: 260px; overflow: auto; background: var(--surface-2); padding: 8px; border-radius: 8px; font-size: 0.8rem; white-space: pre; }
 .tarefas-total { font-size: 1.05rem; margin: 4px 0; }
+.campo-check { display: flex; gap: 8px; align-items: center; font-weight: 600; }

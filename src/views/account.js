@@ -3,6 +3,7 @@ import { esc, toast, confirmDialog } from '../ui/dom.js';
 import { getState, saveProfile, resetProgress, exportData, todayKey } from '../data/store.js';
 import { logout } from '../auth.js';
 import { getTheme, setTheme } from '../theme.js';
+import { sugestoesLigadas, definirSugestoes } from '../ui/completions.js';
 
 export function accountView(root) {
   const { user, profile } = getState();
@@ -27,6 +28,13 @@ export function accountView(root) {
       <div class="segmentado" role="radiogroup" aria-label="Tema">
         ${[['auto', '🖥️ Sistema'], ['light', '☀️ Claro'], ['dark', '🌙 Escuro']].map(([v, l]) => `<label><input type="radio" name="tema" value="${v}" ${tema === v ? 'checked' : ''}><span>${l}</span></label>`).join('')}
       </div>
+    </section>
+
+    <section class="painel">
+      <h2>Editor de código</h2>
+      <label class="campo-check"><input type="checkbox" id="sugestoes" ${sugestoesLigadas() ? 'checked' : ''}>
+        Mostrar sugestões enquanto digito (autocompletar)</label>
+      <p class="pequeno muted">Desligado, as sugestões só aparecem com <kbd>Ctrl</kbd>+<kbd>Espaço</kbd> ou no botão 💡. Digitar sem ajuda treina mais a memória.</p>
     </section>
 
     <section class="painel">
@@ -55,6 +63,11 @@ export function accountView(root) {
     setTheme(r.value);
     accountView(root); // recria (o editor usa as cores do tema)
   }));
+
+  root.querySelector('#sugestoes').addEventListener('change', (e) => {
+    definirSugestoes(e.target.checked);
+    toast(e.target.checked ? 'Sugestões ligadas.' : 'Sugestões desligadas.', 'ok');
+  });
 
   root.querySelector('#exportar').addEventListener('click', () => {
     const blob = new Blob([exportData()], { type: 'application/json' });

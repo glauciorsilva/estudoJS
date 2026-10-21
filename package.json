@@ -13,6 +13,7 @@
     "apostila": "node scripts/gerar-apostila.mjs"
   },
   "dependencies": {
+    "@codemirror/autocomplete": "^6.20.4",
     "@codemirror/commands": "^6.11.1",
     "@codemirror/lang-javascript": "^6.2.5",
     "@codemirror/state": "^6.7.6",

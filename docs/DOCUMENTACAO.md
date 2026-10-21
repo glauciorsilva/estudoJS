@@ -49,6 +49,14 @@ Abra o site no Chrome → menu **⋮** → **Instalar app** (ou “Adicionar à 
 
 Seu código fica salvo automaticamente; dá para sair e voltar depois.
 
+### 1.4.1 Sugestões enquanto digita (autocompletar)
+
+Ao começar a escrever uma palavra no editor, aparece uma lista de opções: variáveis do seu código, `console`, `Math`, `document`… e **modelos de código prontos** (`for`, `forof`, `if`, `ifelse`, `function`, `arrow`, `class`, `try`, `async`, `evento`…). Depois de um ponto (`lista.`, `texto.`, `Math.`) aparecem os métodos mais usados, cada um com uma explicação curta.
+
+- **Enter** ou **Tab** aceita; nos modelos, **Tab** pula para o próximo campo a preencher.
+- **Ctrl+Espaço** ou o botão **💡** da barra de símbolos mostra os modelos mesmo sem ter digitado nada.
+- Em **Minha conta → Editor de código** dá para desligar as sugestões automáticas (treinar sem ajuda fixa melhor a memória).
+
 ### 1.5 Como o app mede o seu progresso
 
 - **Nota do exercício (0–100%)**: 100% se resolveu sozinho e com poucas tentativas. Cai com dicas, muitas tentativas e, principalmente, ao ver a solução. Sobe quando você acerta nas revisões.

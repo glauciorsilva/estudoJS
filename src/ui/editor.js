@@ -5,6 +5,8 @@ import { EditorState, Prec } from '@codemirror/state';
 import { indentWithTab, undo, redo, indentMore } from '@codemirror/commands';
 import { javascript } from '@codemirror/lang-javascript';
 import { oneDark } from '@codemirror/theme-one-dark';
+import { autocompletion, startCompletion } from '@codemirror/autocomplete';
+import { sugestoesJS, variaveisLocais, sugestoesLigadas } from './completions.js';
 
 const isDark = () => document.documentElement.dataset.themeResolved === 'dark';
 
@@ -16,6 +18,8 @@ export function createEditor(parent, { doc = '', onRun, onChange, readOnly = fal
   const extensions = [
     basicSetup,
     javascript(),
+    // Sugestões em português (substituem as padrão, que são em inglês).
+    autocompletion({ override: [sugestoesJS, variaveisLocais], activateOnTyping: sugestoesLigadas(), icons: true }),
     keymap.of([indentWithTab]),
     Prec.highest(keymap.of([
       { key: 'Mod-Enter', run: () => { onRun?.(); return true; } },
@@ -53,6 +57,7 @@ export function createEditor(parent, { doc = '', onRun, onChange, readOnly = fal
     undo: () => { undo(view); view.focus(); },
     redo: () => { redo(view); view.focus(); },
     indent: () => { indentMore(view); view.focus(); },
+    suggest: () => { view.focus(); startCompletion(view); },
     focus: () => view.focus(),
     destroy: () => view.destroy(),
   };
@@ -87,6 +92,7 @@ const SYMBOLS = [
   ['||', ' || ', 0],
   ['?', ' ? ', 0],
   ['log', 'console.log()', 1],
+  ['💡', null, 0, 'suggest'],
   ['↶', null, 0, 'undo'],
   ['↷', null, 0, 'redo'],
 ];
@@ -102,7 +108,7 @@ export function symbolBar(editor) {
     b.type = 'button';
     b.textContent = label;
     b.dataset.i = i;
-    b.setAttribute('aria-label', action === 'undo' ? 'Desfazer' : action === 'redo' ? 'Refazer' : action === 'indent' ? 'Tabulação' : `Inserir ${text.trim()}`);
+    b.setAttribute('aria-label', action === 'undo' ? 'Desfazer' : action === 'redo' ? 'Refazer' : action === 'indent' ? 'Tabulação' : action === 'suggest' ? 'Sugerir código' : `Inserir ${text.trim()}`);
     bar.append(b);
   });
   // pointerdown + preventDefault: não tira o foco do editor (o teclado do celular continua aberto)
